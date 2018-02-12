@@ -3,6 +3,7 @@ import { reduxForm } from 'redux-form'
 import axios from 'axios'
 import { RegisterContainer } from '../../component/register/register-container'
 import { RegisterForm } from '../../component/register/register-form'
+import { PRODUCT_ENDPOINT, TOKEN } from '../../constant/apollo/constant'
 
 class Register extends React.Component {
     constructor(){
@@ -14,7 +15,7 @@ class Register extends React.Component {
     }
 
     componentWillMount() {
-        if(localStorage.getItem("token")) {
+        if(TOKEN) {
             this.props.router.push('/income/add')
         }
     }
@@ -25,7 +26,7 @@ class Register extends React.Component {
         this.setState({
             isLoading: true,
         })
-        axios.post('https://backendjack.herokuapp.com/v1/register', { 
+        axios.post( PRODUCT_ENDPOINT + 'v1/register', { 
             email, 
             password,
             fname,

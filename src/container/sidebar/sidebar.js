@@ -7,6 +7,7 @@ import { graphql } from "react-apollo";
 import gql from "graphql-tag";
 import { CenterComponent } from "../../component/common/center-component/centercomponent"
 import SideBarContent from '../../component/sidebar/sidebarcontent'
+import { TOKEN } from '../../constant/apollo/constant'
 
 const mql = window.matchMedia(`(min-width: 800px)`);
 
@@ -22,7 +23,8 @@ class Sidebars extends React.Component {
     this.sideBarOpen = this.sideBarOpen.bind(this);
   }
   componentWillMount() {
-    if (!localStorage.getItem("token")) {
+    if (TOKEN === null) {
+      console.log('have toke')
       this.props.router.push("/");
     }
     mql.addListener(this.mediaQueryChanged);
@@ -73,12 +75,11 @@ class Sidebars extends React.Component {
         //overlayClassName="active"
         onSetOpen={this.onSetSidebarOpen}
       >
-        {this.props.route.headDetail && (
           <NavLink
             hamburger={this.sideBarOpen}
-            headDetail={this.props.route.headDetail}
+            logOut={this.logOut}
+            //headDetail={this.props.route.headDetail}
           />
-        )}
         {!this.props.loading ?  this.props.children : <CenterComponent loading/>}
       </Sidebar>
     );

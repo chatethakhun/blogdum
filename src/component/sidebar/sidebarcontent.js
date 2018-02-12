@@ -63,11 +63,6 @@ class SideBarContent extends React.Component {
                 ))}
               </ul>
             </div>
-            <div className="signout">
-              <button 
-              onClick={() => this.props.logOut()}
-              >Log out</button>
-            </div>
           </div>
         ) : (
           <CenterComponent loading />

@@ -1,11 +1,12 @@
 import styled from 'styled-components'
+import { VIEW , BORDER, COLOR} from '../../../constant/theme/constant'
 
 export const CenterContainer = styled.div`
     display:flex; 
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    height: ${VIEW.FULL};
     .title {
         display: flex;
         justify-content: center;
@@ -17,11 +18,11 @@ export const CenterContainer = styled.div`
     > div {
         button {
             height: 30px;
-            border-radius: 8px;
+            border-radius: ${BORDER.PRIMARY_RADIUS};
             border: none;
             color: white;
-            width: 100%;
-            background-color: orange;
+            width: ${VIEW.FULL};
+            background-color: ${COLOR.SECONARY};
         }
     }
 `

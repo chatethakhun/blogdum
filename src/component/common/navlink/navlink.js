@@ -1,13 +1,12 @@
 import React from "react";
-import { Link } from "react-router";
 import { NavContainer } from "../../../theme/common/nav-link/nav-link-theme";
 
-export const NavLink = ({ children, ...otherProps }) => (
+export const NavLink = ({ children, ...props }) => (
   <NavContainer>
     <div
       className="hamburger"
       onClick={() => {
-        otherProps.hamburger();
+        props.hamburger();
         //othis.sideBarOpen();
       }}
     >
@@ -15,12 +14,16 @@ export const NavLink = ({ children, ...otherProps }) => (
       <div />
       <div />
     </div>
-    <div>
-      {otherProps.headDetail.map((head, index) => (
-        <Link key={index} to={head.path} activeClassName="active">
-          {head.label}
-        </Link>
-      ))}
+    <div className='log-out'>
+        <p onClick={props.logOut}> LOG OUT</p>
     </div>
   </NavContainer>
 );
+
+// <div>
+// {otherProps.headDetail.map((head, index) => (
+//   <Link key={index} to={head.path} activeClassName="active">
+//     {head.label}
+//   </Link>
+// ))}
+// </div>

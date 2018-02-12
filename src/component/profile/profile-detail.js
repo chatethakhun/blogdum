@@ -8,17 +8,21 @@ export default class ProfileDetail extends React.Component {
       <ProfileDetailContainer>
         <div className="name">
           <div className="edit">
-            <i className="fas fa-edit" 
-              onClick={this.props.gotoEditProfile}/>
+            <div className="title">
+              <h2>MY PROFILE</h2>
+            </div>
+            <div className="icon-edit">
+              <i className="fas fa-edit" onClick={this.props.gotoEditProfile} />
+            </div>
           </div>
           <div>
             <p>First name: {fname}</p>
           </div>
-          <hr />
+          <div className="line" />
           <div>
             <p>Last name: {lname}</p>
           </div>
-          <hr />
+          <div className="line" />
           <div>
             <p>E-mail: {email}</p>
           </div>

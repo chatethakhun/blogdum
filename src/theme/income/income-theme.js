@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { MARGIN } from '../../constant/theme/constant'
 
 export const IncomeContainer  = styled.div`
     h1 {
@@ -10,15 +11,14 @@ export const IncomeContainer  = styled.div`
     background-color: #4BC;
     display: flex;
     justify-content: center;
-    
     > .add-box {
         height: 500px;
         width: 400px;
-        margin-top: 30px;
         padding: 30px;
         background-color: white;
         border-radius: 8px;
         box-shadow: 3px 3px 60px 0px #777;
+        margin: ${MARGIN.BIG_MARGIN};
         > form {
             h3 { 
                 margin: 10px 0px;

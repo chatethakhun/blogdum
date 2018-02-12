@@ -6,21 +6,19 @@ import {
 } from '../../theme/login'
 import { reduxForm } from 'redux-form'
 import axios from 'axios'
-import { Link} from "react-router";
+import { Link} from "react-router"
+import { PRODUCT_ENDPOINT,TOKEN } from '../../constant/apollo/constant'
 
 class Login extends React.Component {
     constructor() {
         super()
         this.state = {
-            disabledButton: false,
             isLoading: false,
-            token: '',
             errorMessage: null
         }
     }
     componentWillMount() {
-
-        if(localStorage.getItem("token") !== null) {
+        if(localStorage.getItem('token')) {
             this.props.router.push('/profile')
         }
     }
@@ -28,7 +26,7 @@ class Login extends React.Component {
         this.setState({
             isLoading: true
         })
-        axios.post('https://backendjack.herokuapp.com/v1/auth', { email: email, password: password })
+        axios.post( PRODUCT_ENDPOINT +'v1/auth', { email: email, password: password })
             .then(response => {
                 this.setState({
                     isLoading: false

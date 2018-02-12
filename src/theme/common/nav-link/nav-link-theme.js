@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { MARGIN, COLOR } from '../../../constant/theme/constant'
 
 export const NavContainer = styled.nav`
     height: 50px;
@@ -7,7 +8,7 @@ export const NavContainer = styled.nav`
     background-color: orange;
     .hamburger {
         position: absolute;
-        left: 3%;
+        left: 5%;
         display: none;
         flex-direction: column;
         cursor: pointer;
@@ -22,23 +23,18 @@ export const NavContainer = styled.nav`
             margin: 3px 0;
         }
     }
-    > div {
+    .log-out {
         display: flex;
-        align-items: center;
-        > a {
+        flex: 1;
+        justify-content: flex-end;
+        margin-right: ${MARGIN.BIG_MARGIN};
+        > p {
             color: white;
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            padding: 0px 20px;
-            height: 70%;
-            border-radius: 8px;
-    }
-    a:hover {
-        background-color: #999;
-    }
-    .active {
-        background-color: #555;
+            cursor: pointer;
+        }
+        > p:hover {
+            color:${COLOR.DARK_GRAY}
+        }
     }
 }
 `
