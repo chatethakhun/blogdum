@@ -11,7 +11,6 @@ class Register extends React.Component {
             isLoading: false,
             errorMessage:null
         }
-        this.fileUpLoad = this.fileUpLoad.bind(this)
     }
 
     componentWillMount() {
