@@ -4,6 +4,7 @@ export const VIEW = {
 }
 
 export const FONT = {
+    SMALL: '14px',
     NORMAL: '18px;',
     HEAD:'20px',
     INPUT: '15px',
@@ -32,4 +33,9 @@ export const BORDER = {
     COLOR: 'red',
     PRIMARY_RADIUS: '8px',
     INPUT_RADIUS: '4px'
+}
+export const SCREEN = {
+    SMALL_MOBILE: '320px',
+    MOBILE: '640px',
+    TABLET: '960px'
 }

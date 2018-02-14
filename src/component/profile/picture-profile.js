@@ -1,6 +1,6 @@
 import React from "react";
 import axios from 'axios'
-import { PRODUCT_ENDPOINT } from '../../constant/apollo/constant'
+import { PRODUCT_ENDPOINT, LOCAL_ENDPOINT } from '../../constant/apollo/constant'
 import { ProfilePictureContainer } from "../../theme/profile/profile-theme";
 import { CenterComponent } from "../common/center-component/centercomponent";
 
@@ -27,7 +27,7 @@ class PictureProfile extends React.Component {
       }
     };
     axios
-      .post(PRODUCT_ENDPOINT + "v1/upload", formData, config)
+      .post(LOCAL_ENDPOINT + "v1/upload", formData, config)
       .then(res => {
         console.log("response ====> ", res);
         this.setState({

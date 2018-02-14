@@ -1,5 +1,5 @@
 import axios from "axios";
-import { PRODUCT_ENDPOINT } from "../constant/apollo/constant";
+import { PRODUCT_ENDPOINT, LOCAL_ENDPOINT } from "../constant/apollo/constant";
 import {
   FETCH_USER_AUTH_SUCCCESS,
   FETCH_USER_AUTH_FAILED,
