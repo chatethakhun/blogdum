@@ -8,11 +8,12 @@ height: 100vh;
         > div {
             text-align: center;
             margin-top: 10px;
-            img {
+            .img {
                 border-radius: 50%;
                 width: 130px;
                 height: 130px;
                 cursor: pointer;
+                background-size: cover;
             }
         }
     }

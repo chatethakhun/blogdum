@@ -27,7 +27,7 @@ class SideBarContent extends React.Component {
             <div className="profile">
               <div>
                 {this.props.me ? this.props.me.imageUrl && (
-                  <img src={this.props.me.imageUrl} alt="" />
+                  <div className='img' style={{ backgroundImage: "url(" + this.props.me.imageUrl + ")" }}/>
                 ):""}
               </div>
               <div>
