@@ -43,6 +43,7 @@ class Login extends React.Component {
 
 
   render() {
+    console.log('env =====>', process.env)
     const { handleSubmit } = this.props;
     return (
       <LoginContainer>

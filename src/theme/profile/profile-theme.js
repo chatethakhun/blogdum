@@ -41,7 +41,7 @@ export const ProfileDetailContainer = styled.div`
     width: ${VIEW.FULL};
     padding: 0px 10px;
     .line {
-      border: 1px solid ${FONT.DARK_GRAY};
+      border: 1px solid ${COLOR.LIGHT_GRAY};
     }
     .edit {
       justify-content: space-between;
@@ -56,10 +56,19 @@ export const ProfileDetailContainer = styled.div`
     }
     > div {
       display: flex;
-      > p {
-        margin-left: ${MARGIN.NORMAL_MARGIN};
+      >div:first-child {
         display: flex;
-        align-items: center;
+        flex-basis: 10%;
+      }
+      >div {
+        > p {
+          margin-left: ${MARGIN.NORMAL_MARGIN};
+          font-size:${FONT.NORMAL}
+          color: ${COLOR.DARK_GRAY}
+        }
+        >p:last-child {
+          color:${FONT.INPUT}
+        }
       }
     }
   }

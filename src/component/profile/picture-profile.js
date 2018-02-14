@@ -1,8 +1,10 @@
 import React from "react";
+import axios from 'axios'
+import { PRODUCT_ENDPOINT } from '../../constant/apollo/constant'
 import { ProfilePictureContainer } from "../../theme/profile/profile-theme";
 import { CenterComponent } from "../common/center-component/centercomponent";
 
-export default class PictureProfile extends React.Component {
+class PictureProfile extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -15,32 +17,28 @@ export default class PictureProfile extends React.Component {
     inputField.click();
   };
   onChange = e => {
-    // this.setState({
-    //   isLoading: true
-    // });
-    // const image = e.target.files[0];
-    // const formData = new FormData();
-    // formData.append("file", image);
-    // const config = {
-    //   headers: {
-    //     "content-type": "multipart/form-data",
-    //     authorization: `Bearer ${localStorage.getItem("token")}`
-    //   }
-    // };
-    // axios
-    //   .post("http://localhost:8080/v1/upload", formData, config)
-    //   .then(res => {
-    //     console.log("response ====> ", res);
-    //     this.setState({
-    //       isLoading: false,
-    //       imageUrl: res.data.url
-    //     });
-    //     this.props.updateProfile(this.state.imageUrl);
-    //   });
+    const image = e.target.files[0];
+    const formData = new FormData();
+    formData.append("file", image);
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+        authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    };
+    axios
+      .post(PRODUCT_ENDPOINT + "v1/upload", formData, config)
+      .then(res => {
+        console.log("response ====> ", res);
+        this.setState({
+          isLoading: false,
+          imageUrl: res.data.url
+        });
+        this.props.updateProfile(this.state.imageUrl);
+      });
   };
 
   render() {
-    console.log(this.props.profile);
     return (
       <ProfilePictureContainer>
         <div className="image-profile">
@@ -69,3 +67,6 @@ export default class PictureProfile extends React.Component {
     );
   }
 }
+
+
+export default PictureProfile

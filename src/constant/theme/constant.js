@@ -24,7 +24,8 @@ export const PADDING = {
 export const COLOR = {
     PRIMARY: '#4bc',
     SECONARY: 'orange',
-    DARK_GRAY: '#777'
+    LIGHT_GRAY: '#d8d8d8',
+    DARK_GRAY: '#333'
 }
 
 export const BORDER = {

@@ -59,7 +59,6 @@ async function registerAsync({ email, password , fname, lname}) {
 }
 
 export const register = ({email, password, fname, lname}) => {
-  console.log('register ===>', email)
   return async dispatch => {
     try {
       await registerAsync({ email, password , fname, lname })

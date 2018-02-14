@@ -1,12 +1,20 @@
 {
   "name": "incoming",
   "version": "0.1.0",
+  "babel": {
+    "env": {
+      "production": {
+        "plugins": ["transform-remove-console"]
+      }
+    }  
+  },
   "private": true,
   "dependencies": {
     "apollo-client": "^2.2.0",
     "apollo-client-preset": "^1.0.6",
     "apollo-link-context": "^1.0.3",
     "axios": "^0.17.1",
+    "babel-plugin-transform-remove-console": "^6.9.0",
     "graphql": "^0.12.3",
     "graphql-tag": "^2.6.1",
     "jwt-decode": "^2.2.0",

@@ -3,7 +3,7 @@ import { ApolloClient } from 'apollo-client';
 import { createHttpLink } from 'apollo-link-http';
 import { setContext } from 'apollo-link-context';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import { PRODUCT_ENDPOINT, TOKEN } from './constant'
+import { PRODUCT_ENDPOINT } from './constant'
 const httpLink = createHttpLink({
   uri: PRODUCT_ENDPOINT + 'v1/graphql',
 });

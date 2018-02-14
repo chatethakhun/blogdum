@@ -16,15 +16,30 @@ export default class ProfileDetail extends React.Component {
             </div>
           </div>
           <div>
-            <p>First name: {fname}</p>
+            <div>
+              <p>First name:</p>
+            </div>
+            <div>
+              <p>{fname}</p>
+            </div>
           </div>
           <div className="line" />
           <div>
-            <p>Last name: {lname}</p>
+            <div>
+              <p>Last name:</p>
+            </div>
+            <div>
+              <p>{lname}</p>
+            </div>
           </div>
           <div className="line" />
           <div>
-            <p>E-mail: {email}</p>
+            <div>
+              <p>Email:</p>
+            </div>
+            <div>
+              <p>{email}</p>
+            </div>
           </div>
         </div>
       </ProfileDetailContainer>
