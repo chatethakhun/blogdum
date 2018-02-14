@@ -27,7 +27,7 @@ class PictureProfile extends React.Component {
       }
     };
     axios
-      .post(LOCAL_ENDPOINT + "v1/upload", formData, config)
+      .post(PRODUCT_ENDPOINT + "v1/upload", formData, config)
       .then(res => {
         console.log("response ====> ", res);
         this.setState({
