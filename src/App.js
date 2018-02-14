@@ -14,6 +14,7 @@ import NotFound from './container/notfound/notfound'
 // import Members from './container/dashboard/member'
 import AddIncome from './container/income/add-income'
 import Profile from './container/profile/profile'
+import EditProfile from './container/profile/edit-profile'
 import Sidebars from './container/sidebar/sidebar'
 
 
@@ -24,17 +25,9 @@ const headDetail = [{
   label: 'Show Income',
   path: '/income/show'
 }]
-store.subscribe(() => console.log("state in store ====> ", store.getState()))
+//store.subscribe(() => console.log("state in store ====> ", store.getState()))
 
 class App extends Component {
-
-  constructor() {
-    super()
-    this.state = {
-      isOpen: true
-    }
-  }
-
   render() {
     return (
       <ApolloProvider client={client}>
@@ -50,6 +43,7 @@ class App extends Component {
             </Route>
             <Route path='profile' component={Sidebars} >
               <IndexRoute component={Profile} />
+              <Route path='/profile/edit' component={EditProfile}/>
             </Route>
             <Route path='member' component={Dashboard} />
             <Route path="*" component={NotFound}/>

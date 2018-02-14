@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-
+import { FONT } from '../../constant/theme/constant'
 export const LoginContainer = styled.div`
     height: 100vh;
     display:flex;
@@ -123,6 +123,7 @@ export const LoginFormContainer = styled.div`
                 border: 1px solid #777;
                 border-radius: 4px;
                 text-indent: 10px;
+                font-size: ${FONT.INPUT}
             }
             > ::-webkit-input-placeholder {
                 //padding: 0px 10px;

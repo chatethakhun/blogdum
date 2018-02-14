@@ -7,7 +7,6 @@ import { graphql } from "react-apollo";
 import gql from "graphql-tag";
 import { CenterComponent } from "../../component/common/center-component/centercomponent"
 import SideBarContent from '../../component/sidebar/sidebarcontent'
-import { TOKEN } from '../../constant/apollo/constant'
 
 const mql = window.matchMedia(`(min-width: 800px)`);
 
@@ -23,7 +22,7 @@ class Sidebars extends React.Component {
     this.sideBarOpen = this.sideBarOpen.bind(this);
   }
   componentWillMount() {
-    if (TOKEN === null) {
+    if (!localStorage.getItem('token')) {
       console.log('have toke')
       this.props.router.push("/");
     }
@@ -31,7 +30,7 @@ class Sidebars extends React.Component {
     this.setState({ mql: mql, sidebarDocked: mql.matches });
   }
   componentWillReceiveProps(nextProps) {
-    nextProps.setMe(nextProps.data.me);
+    nextProps.setMe(nextProps.data);
     this.setState({
       me: nextProps.data.me
     });
@@ -43,7 +42,7 @@ class Sidebars extends React.Component {
 
   logOut = () => {
     localStorage.removeItem("token");
-    this.props.router.push("/");
+    window.location.reload()
   };
 
   sideBarOpen = () => {
@@ -57,13 +56,11 @@ class Sidebars extends React.Component {
     });
   };
 
-  // goToEditProfile = () => {
-  //   this.props.router.push("profile");
-  // };
   render() {
     return (
+      
       <Sidebar
-        sidebar={<SideBarContent 
+        sidebar={ !this.props.data.loading && <SideBarContent 
                       loading={this.props.data.loading} 
                       me={this.state.me}
                       logOut={this.logOut} 
@@ -71,14 +68,11 @@ class Sidebars extends React.Component {
                     }
         docked={this.state.sidebarDocked}
         open={this.state.clickMenu}
-        // sidebarClassName="menu"
-        //overlayClassName="active"
         onSetOpen={this.onSetSidebarOpen}
       >
           <NavLink
             hamburger={this.sideBarOpen}
             logOut={this.logOut}
-            //headDetail={this.props.route.headDetail}
           />
         {!this.props.loading ?  this.props.children : <CenterComponent loading/>}
       </Sidebar>

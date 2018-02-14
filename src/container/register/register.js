@@ -1,57 +1,50 @@
 import React from 'react'
 import { reduxForm } from 'redux-form'
-import axios from 'axios'
+import { connect }  from 'react-redux'
 import { RegisterContainer } from '../../component/register/register-container'
-import { RegisterForm } from '../../component/register/register-form'
-import { PRODUCT_ENDPOINT, TOKEN } from '../../constant/apollo/constant'
+import RegisterForm from '../../component/register/register-form'
+import { bindActionCreators } from "redux";
+import { register } from '../../action/login'
+import { SET_INITTAIL,
+         REQUEST_FETCH_SERVER } from '../../constant/redux/constant'
 
 class Register extends React.Component {
     constructor(){
         super() 
         this.state = {
             isLoading: false,
-            errorMessage:null
+            errorMessage:''
         }
+        this.onSubmit = this.onSubmit.bind(this)
     }
 
     componentWillMount() {
-        if(TOKEN) {
+        this.props.dispatch({
+            type:SET_INITTAIL
+        })
+        if(localStorage.getItem('token')) {
             this.props.router.push('/income/add')
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        console.log('nextporop ==========> ', nextProps.registerProps.errorMessage)
+        if (nextProps.registerProps.errorMessage !== null) {
+            console.log('enter')
+          this.setState({
+            errorMessage: nextProps.registerProps.errorMessage,
+          })
+        }
+      }
 
     onSubmit = ({email, password, fname, lname}) => {
-        //this.fileUpLoad(image)
-        this.setState({
-            isLoading: true,
+        this.props.dispatch({
+            type: REQUEST_FETCH_SERVER
         })
-        axios.post( PRODUCT_ENDPOINT + 'v1/register', { 
-            email, 
-            password,
-            fname,
-            lname,
-         })
-        .then(response => {
-            this.setState({
-                isLoading:false
-            })
-
-            if(!response.data.status) {
-                this.setState({
-                    errorMessage: response.data.message
-                })
-            }else {
-                this.props.router.push('/')
-            }
-
-
-        })
-        .catch(error => {
-            console.log('Error fetching and parsing data', error);
-        })
+        this.props.register({email, password, fname, lname})
     }
     render() {
+        console.log('STATE FROM REDUCER', this.props.registerProps)
         return (
             <RegisterContainer>
                 <div>
@@ -73,7 +66,7 @@ class Register extends React.Component {
                                 onSubmit={(data) => this.onSubmit(data)}
                                 handleSubmit={this.props.handleSubmit}
                                 errorMessage={this.state.errorMessage}
-                                isLoading={this.state.isLoading}
+                                isLoading={this.props.registerProps.isLoading}
                                  />
                         </div>
                     </div>
@@ -86,4 +79,17 @@ const formConfiguration = {
     form: 'register-form'
 }
 
-export default reduxForm(formConfiguration)(Register)
+const mapDispatchToProps = (
+    dispatch //use when use asycn in action
+  ) =>
+    bindActionCreators(
+      {
+        register
+      },
+      dispatch
+    );
+const mapStateToProps = (state) => ({
+    registerProps: state.login
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(reduxForm(formConfiguration)(Register))

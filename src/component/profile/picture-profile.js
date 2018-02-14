@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import { ProfilePictureContainer } from "../../theme/profile/profile-theme";
 import { CenterComponent } from "../common/center-component/centercomponent";
 
@@ -16,28 +15,28 @@ export default class PictureProfile extends React.Component {
     inputField.click();
   };
   onChange = e => {
-    this.setState({
-      isLoading: true
-    });
-    const image = e.target.files[0];
-    const formData = new FormData();
-    formData.append("file", image);
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data",
-        authorization: `Bearer ${localStorage.getItem("token")}`
-      }
-    };
-    axios
-      .post("http://localhost:8080/v1/upload", formData, config)
-      .then(res => {
-        console.log("response ====> ", res);
-        this.setState({
-          isLoading: false,
-          imageUrl: res.data.url
-        });
-        this.props.updateProfile(this.state.imageUrl);
-      });
+    // this.setState({
+    //   isLoading: true
+    // });
+    // const image = e.target.files[0];
+    // const formData = new FormData();
+    // formData.append("file", image);
+    // const config = {
+    //   headers: {
+    //     "content-type": "multipart/form-data",
+    //     authorization: `Bearer ${localStorage.getItem("token")}`
+    //   }
+    // };
+    // axios
+    //   .post("http://localhost:8080/v1/upload", formData, config)
+    //   .then(res => {
+    //     console.log("response ====> ", res);
+    //     this.setState({
+    //       isLoading: false,
+    //       imageUrl: res.data.url
+    //     });
+    //     this.props.updateProfile(this.state.imageUrl);
+    //   });
   };
 
   render() {
@@ -48,8 +47,6 @@ export default class PictureProfile extends React.Component {
           <img
             src={
               this.props.profile
-                ? this.props.profile
-                : "https://api.adorable.io/avatars/285/abott@adorable.png"
             }
             alt=""
             //onClick={this.goToEditProfile.bind(this)}

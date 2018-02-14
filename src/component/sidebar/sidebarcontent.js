@@ -9,7 +9,7 @@ const headerLinks = [
     path: "profile"
   },
   {
-    label: "Income",
+    label: "Community",
     path: "/income"
   }
 ];
@@ -26,19 +26,9 @@ class SideBarContent extends React.Component {
             </div>
             <div className="profile">
               <div>
-                {!this.props.me.imageUrl ? (
-                  <img
-                    src="https://api.adorable.io/avatars/285/abott@adorable.png"
-                    alt=""
-                    //onClick={this.goToEditProfile.bind(this)}
-                  />
-                ) : (
-                  <img
-                    src={this.props.me.imageUrl}
-                    alt=""
-                    //onClick={this.goToEditProfile.bind(this)}
-                  />
-                )}
+                {this.props.me ? this.props.me.imageUrl && (
+                  <img src={this.props.me.imageUrl} alt="" />
+                ):""}
               </div>
               <div>
                 <p>

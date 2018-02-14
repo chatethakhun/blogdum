@@ -1,97 +1,89 @@
 import React from "react";
 import { Field } from "redux-form";
-import { ButtonComponent } from '../common/button/button'
+import { ButtonComponent } from "../common/button/button";
 
 const required = value => (value ? undefined : "Required");
 
-const renderField = ({
-  // validate section
-  input,
-  label,
-  type,
-  meta: { touched, error, warning }
-}) => (
-  <div>
-    <input {...input} placeholder={label} type={type} />
-    {touched &&
-      ((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}
-  </div>
-);
+class renderField extends React.Component {
+  render() {
+    console.log("render props ===>", this.props);
+    return (
+      <div>
+        <input
+          {...this.props.input}
+          placeholder={this.props.label}
+          type={this.props.type}
+        />
+        {this.props.meta.touched &&
+          ((this.props.meta.error && <span>{this.props.meta.error}</span>) ||
+            (this.props.meta.warning && <span>{this.props.meta.warning}</span>))}
+      </div>
+    );
+  }
+}
 
-// class renderUploadField extends React.Component {
-//   constructor() {
-//     super()
-//     this.state = {
-//       file: null
-//     }
-//   }
-//   handleFile = (evt) => {
-//     console.log('file upload ===>', this.props)
-//     const img = evt.target.files[0]
-//     this.setState({
-//       file: img
-//     })
-//     this.props.input.onChange(img)
-//   }
-//   render() {
-//     return <input type="file" onChange={this.handleFile} />
-//   }
-// }
 
-export const RegisterForm = ({
-  onSubmit,
-  handleSubmit,
-  disabledButton,
-  errorMessage,
-  isloading
-}) => {
-  return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+class RegisterForm extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      defaultValue: ""
+    };
+  }
 
-      <Field
-        name="email"
-        component={renderField}
-        label="Email"
-        type="email"
-        placeholder="Email"
-        validate={[required]}
-      />
+  componentWillMount() {
+    if (this.props.defaultValue) {
+      this.setState({
+        defaultValue: this.props.defaultValue
+      });
+    }
+  }
+  render() {
+    const {
+      onSubmit,
+      handleSubmit,
+      errorMessage,
+    } = this.props
 
-      <Field
-        name="password"
-        component={renderField}
-        label="Password"
-        type="password"
-        placeholder="Password"
-        validate={[required]}
-      />
-
-      <Field
-        name="fname"
-        component={renderField}
-        label="First Name"
-        type="text"
-        placeholder="First Name"
-        validate={[required]}
-      />
-
-      <Field
-        name="lname"
-        component={renderField}
-        label="Last Name"
-        type="text"
-        placeholder="Last Name"
-        validate={[required]}
-      />
-      {
-        !isloading ?       
-          <button type="submit" disabled={disabledButton}>
-            Register
-          </button>: 
-          <ButtonComponent loading/>
-      }
-
+    console.log("this props ===>", this.props.isLoading);
+    return (
+      <form onSubmit={handleSubmit(onSubmit)}>
       {errorMessage && <p>{errorMessage}</p>}
-    </form>
-  );
-};
+        <Field
+          name="email"
+          component={renderField}
+          label="Email"
+          type="email"
+          validate={[required]}
+        />
+        <Field
+          name="password"
+          component={renderField}
+          label="Password"
+          type="password"
+          validate={[required]}
+        />
+        <Field
+          name="fname"
+          component={renderField}
+          label="First name"
+          type="text"
+          validate={[required]}
+        />
+        <Field
+          name="lname"
+          component={renderField}
+          label="Last name"
+          type="text"
+          validate={[required]}
+        />
+        {
+          !this.props.isLoading ? <button type='submit' >Submit</button> :<ButtonComponent loading/> 
+        }
+
+      </form>
+    );
+  }
+}
+
+export default RegisterForm;

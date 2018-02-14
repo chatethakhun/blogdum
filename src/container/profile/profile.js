@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import gql from 'graphql-tag'
-import { graphql, withApollo } from 'react-apollo'
+import gql from "graphql-tag";
 
 import { ProfileContainer } from "../../theme/profile/profile-theme";
 import PictureProfile from "../../component/profile/picture-profile";
@@ -14,33 +13,33 @@ class Profile extends React.Component {
     this.state = {
       me: ""
     };
-    this.updateProfile = this.updateProfile.bind(this)
-    this.gotoEditProfile = this.gotoEditProfile.bind(this)
+    this.updateProfile = this.updateProfile.bind(this);
+    this.gotoEditProfile = this.gotoEditProfile.bind(this);
   }
 
-  updateProfile = (imageUrl) => {
-    this.props.mutate({variables: {imageUrl}})
-    .then(() => {
-      window.location.reload()
-    })
-  }
+  updateProfile = imageUrl => {
+    this.props.mutate({ variables: { imageUrl } }).then(() => {
+      window.location.reload();
+    });
+  };
   gotoEditProfile = () => {
-    alert('coming soon')
-  }
- 
+    alert("coming soon");
+  };
+
   render() {
     console.log("profile  ===>", this.props);
     return (
       <ProfileContainer>
-        {this.props.data && (
+        {this.props.profile ? (
           <div>
-            <PictureProfile profile={this.props.data.me.imageUrl} 
-                            updateProfile={(imageUrl) => this.updateProfile(imageUrl)}                
+            <PictureProfile
+              profile={this.props.profile.me.imageUrl}
+              //updateProfile={imageUrl => this.updateProfile(imageUrl)}
             />
-            <ProfileDetail 
-              me={this.props.data.me} 
-              gotoEditProfile={this.gotoEditProfile}/>
+
           </div>
+        ) : (
+          <CenterComponent loading />
         )}
       </ProfileContainer>
     );
@@ -48,19 +47,22 @@ class Profile extends React.Component {
 }
 
 const mapState = state => ({
-  data: state.me
+  profile: state.me
 });
-
 
 const UPDATE_PROFILE = gql`
   mutation updateProfile($imageUrl: String!) {
-    updateProfile(imageUrl: $imageUrl) 
-      {
-        message
-        status
-      } 
+    updateProfile(imageUrl: $imageUrl) {
+      message
+      status
+    }
   }
 `;
 
 //export default graphql(ME_QUERY)(Profile)
-export default connect(mapState, null)(graphql(UPDATE_PROFILE)(withApollo(Profile)));
+export default connect(mapState, null)(Profile);
+
+// <ProfileDetail
+// //me={this.props.data.me}
+// //gotoEditProfile={this.gotoEditProfile}
+// />
