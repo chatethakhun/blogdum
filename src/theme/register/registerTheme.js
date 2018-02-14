@@ -1,4 +1,7 @@
 import styled from 'styled-components'
+import { SCREEN,
+         MARGIN,
+         FONT } from '../../constant/theme/constant'
 
 export const Register = styled.div`
     background-color: #4BC;
@@ -16,7 +19,7 @@ export const Register = styled.div`
             display: flex;
             flex:1;
             width:200px;
-            margin: 20px
+            margin: 20px;
         }
         > .image-intro {
             background: url("https://picsum.photos/500");
@@ -107,6 +110,29 @@ export const Register = styled.div`
                 }
             }
 
+        }
+    }
+    @media screen and (max-width: ${SCREEN.TABLET}) {
+        > div {
+            width: 100%;
+            height: 95%;
+            flex-direction:column;
+            margin: ${MARGIN.BIG_MARGIN};
+            > div {
+                margin: 0;
+            }
+            .image-intro {
+                width: 100%;
+            }
+            .register-form {
+                width: 100%;
+                p {
+                    margin: 0px 50px !important;
+                }
+                h2,p {
+                    font-size: ${FONT.SMALL}
+                }
+            }
         }
     }
 `

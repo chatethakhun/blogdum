@@ -37,5 +37,6 @@ export const BORDER = {
 export const SCREEN = {
     SMALL_MOBILE: '320px',
     MOBILE: '640px',
-    TABLET: '960px'
+    TABLET: '960px',
+    LARGE_TABLET: '1024px'
 }
