@@ -1,48 +1,78 @@
-import React from 'react'
-import { reduxForm } from 'redux-form'
-import { connect } from 'react-redux'
-import RegisterForm from '../../component/register/register-form'
-
+import { EditProfileContainer } from "../../theme/profile/profile-theme";
+import React from "react";
+import RegisterForm from "../../component/register/register-form";
+import { connect } from "react-redux";
+import { reduxForm } from "redux-form";
+import { setMe } from "../../action/member";
 
 class EditProfile extends React.Component {
-    onSubmit = () => {
+  constructor() {
+    super();
+    this.state = {
+      me: ""
+    };
+  }
 
+  componentWillReceiveProps(nextProps) {
+    console.log("nextprops ===>", nextProps.initialValues);
+    if (nextProps.initialValues) {
+      this.setState({
+        me: nextProps.initialValues
+      });
     }
-    render(){
-        console.log( ' edit profile props' , this.props)
-        return (
-            <div>
-                <RegisterForm 
-                    handleSubmit={this.props.handleSubmit}
-                    onSubmit={this.onSubmit}
-                    defaultValue = {this.props.me}
-                    />
-            </div>
-        )
-    }
+  }
+
+  onSubmit = () => {};
+  render() {
+    console.log(" edit profile props", this.props);
+    console.log(" edit profile state", this.state);
+    return (
+      <EditProfileContainer>
+        <div
+          className="edit-picture"
+          style={{
+            border: "1px solid red"
+          }}
+        >
+          <div
+            className="img"
+            style={{
+              backgroundImage: `url(${this.state.me.imageUrl})`
+            }}
+          />
+          <div className="text-change">
+            <p>Click to change profile</p>
+          </div>
+        </div>
+        <div
+          className="edit-form"
+          style={{
+            border: "1px solid green"
+          }}
+        >
+          <RegisterForm
+            handleSubmit={this.props.handleSubmit}
+            onSubmit={this.onSubmit}
+            initialValues={this.state.me}
+            loadMe={this.props.load}
+          />
+        </div>
+      </EditProfileContainer>
+    );
+  }
 }
 
 const formConfiguration = {
-    form: 'edit-form'
-}
+  form: "edit-form"
+};
 
-const mapStateToProps = (state) => ({
-    me: state.me
-})
+EditProfile = reduxForm(formConfiguration)(EditProfile);
 
-export default connect(mapStateToProps, null)(reduxForm(formConfiguration)(EditProfile))
+EditProfile = connect(
+  state => ({
+    initialValues: state.me.me.me //// set initial data from load
+  }),
+  { load: setMe } /// setme is action for set initial data
+)(EditProfile);
 
-
-// InitializeFromStateForm = reduxForm({
-//     form: 'initializeFromState' // a unique identifier for this form
-//   })(InitializeFromStateForm)
-  
-//   // You have to connect() to any reducers that you wish to connect to yourself
-//   InitializeFromStateForm = connect(
-//     state => ({
-//       initialValues: state.account.data // pull initial values from account reducer
-//     }),
-//     { load: loadAccount } // bind account loading action creator
-//   )(InitializeFromStateForm)
-  
-//   export default InitializeFromStateForm
+export default EditProfile;

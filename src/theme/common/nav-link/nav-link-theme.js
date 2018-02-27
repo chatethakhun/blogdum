@@ -1,11 +1,12 @@
-import styled from 'styled-components'
-import { MARGIN, COLOR } from '../../../constant/theme/constant'
+import { COLOR, MARGIN } from "../../../constant/theme/constant";
+
+import styled from "styled-components";
 
 export const NavContainer = styled.nav`
     height: 50px;
     display: flex;
     justify-content: center;
-    background-color: orange;
+    background-color: ${COLOR.BLUE};
     .hamburger {
         position: absolute;
         left: 5%;
@@ -28,13 +29,13 @@ export const NavContainer = styled.nav`
         flex: 1;
         justify-content: flex-end;
         margin-right: ${MARGIN.BIG_MARGIN};
-        > p {
-            color: white;
+        > p:hover {
+            color: ${COLOR.DARK_GRAY};
             cursor: pointer;
         }
-        > p:hover {
-            color:${COLOR.DARK_GRAY}
+        > p {
+            color:${COLOR.WHITE}
         }
     }
 }
-`
+`;

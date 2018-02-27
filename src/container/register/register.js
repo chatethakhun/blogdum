@@ -1,95 +1,114 @@
-import React from 'react'
-import { reduxForm } from 'redux-form'
-import { connect }  from 'react-redux'
-import { RegisterContainer } from '../../component/register/register-container'
-import RegisterForm from '../../component/register/register-form'
+import {
+  REQUEST_FETCH_SERVER,
+  SET_INITTAIL
+} from "../../constant/redux/constant";
+import { compose, lifecycle, withHandlers, withState } from "recompose";
+import { register, requestServer } from "../../action/login";
+
+import { ButtonComponent } from "../../component/common/button/button";
+import Formsy from "formsy-react-es6";
+import React from "react";
+import { RegisterContainer } from "../../component/register/register-container";
+import Text from "../../component/common/input/text";
 import { bindActionCreators } from "redux";
-import { register } from '../../action/login'
-import { SET_INITTAIL,
-         REQUEST_FETCH_SERVER } from '../../constant/redux/constant'
+import { connect } from "react-redux";
 
-class Register extends React.Component {
-    constructor(){
-        super() 
-        this.state = {
-            isLoading: false,
-            errorMessage:''
-        }
-        this.onSubmit = this.onSubmit.bind(this)
-    }
-
-    componentWillMount() {
-        this.props.dispatch({
-            type:SET_INITTAIL
-        })
-        if(localStorage.getItem('token')) {
-            this.props.router.push('/income/add')
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        console.log('nextporop ==========> ', nextProps.registerProps.errorMessage)
-        if (nextProps.registerProps.errorMessage !== null) {
-            console.log('enter')
-          this.setState({
-            errorMessage: nextProps.registerProps.errorMessage,
-          })
-        }
+const enhance = compose(
+  connect(
+    state => {
+      return {
+        login: state.login
+      };
+    },
+    dispatch =>
+      bindActionCreators(
+        {
+          register,
+          requestServer
+        },
+        dispatch
+      )
+  ),
+  withState("canSubmit", "changeSubmit", false),
+  withHandlers({
+    enableButton: props => () => props.changeSubmit(true),
+    disableButton: props => () => {
+      if (props.canSubmit) {
+        props.changeSubmit(false);
       }
-
-    onSubmit = ({email, password, fname, lname}) => {
-        this.props.dispatch({
-            type: REQUEST_FETCH_SERVER
-        })
-        this.props.register({email, password, fname, lname})
+    },
+    submit: props => model => {
+      props.requestServer();
+      props.register(model);
     }
-    render() {
-        console.log('STATE FROM REDUCER', this.props.registerProps)
-        return (
-            <RegisterContainer>
-                <div>
-                    <div className="image-intro">
-                    </div>
-                    <div className="register-form">
-                        <div className="intro-register">
-                            <div>
-                                <h2>Register</h2>
-                            </div>
-                            <div>
-                                <p>
-                                    Don't have an account?. <span>Create your account.</span> It takes less than a minute
-                                </p>
-                            </div>
-                        </div>
-                        <div className="form">
-                            <RegisterForm
-                                onSubmit={(data) => this.onSubmit(data)}
-                                handleSubmit={this.props.handleSubmit}
-                                errorMessage={this.state.errorMessage}
-                                isLoading={this.props.registerProps.isLoading}
-                                 />
-                        </div>
-                    </div>
-                </div>
-            </RegisterContainer>
-        )
+  }),
+  lifecycle({
+    componentWillMount() {
+      if (localStorage.getItem("token")) {
+        this.props.router.push("/profile");
+      }
     }
-}
-const formConfiguration = {
-    form: 'register-form'
-}
+  })
+);
 
-const mapDispatchToProps = (
-    dispatch //use when use asycn in action
-  ) =>
-    bindActionCreators(
-      {
-        register
-      },
-      dispatch
-    );
-const mapStateToProps = (state) => ({
-    registerProps: state.login
-})
+const Register = props => (
+  <RegisterContainer>
+    <div>
+      <div className="image-intro" />
+      <div className="register-form">
+        <div className="intro-register">
+          <div>
+            <h2>Register</h2>
+          </div>
+          <div>
+            <p>
+              Don't have an account?. <span>Create your account.</span> It takes
+              less than a minute
+            </p>
+          </div>
+        </div>
+        <div className="form">
+          <Formsy.Form
+            onValid={props.enableButton}
+            onInvalid={props.disableButton}
+            onValidSubmit={props.submit}
+          >
+            <div>
+              <Text
+                name="email"
+                required
+                placeholder="Email"
+                type="email"
+                value=""
+              />
+            </div>
+            <div>
+              <Text
+                name="password"
+                required
+                placeholder="Password"
+                type="password"
+                value=""
+              />
+            </div>
+            <div>
+              <Text name="fname" required placeholder="First Name" value="" />
+            </div>
+            <div>
+              <Text name="lname" placeholder="Last Name" value="" />
+            </div>
+            {props.login.isLoading ? (
+              <ButtonComponent loading />
+            ) : (
+              <ButtonComponent disabled={!props.canSubmit}>
+                Submit
+              </ButtonComponent>
+            )}
+          </Formsy.Form>
+        </div>
+      </div>
+    </div>
+  </RegisterContainer>
+);
 
-export default connect(mapStateToProps, mapDispatchToProps)(reduxForm(formConfiguration)(Register))
+export default enhance(Register);

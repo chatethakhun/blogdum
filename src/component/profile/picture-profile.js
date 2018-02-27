@@ -42,13 +42,7 @@ class PictureProfile extends React.Component {
     return (
       <ProfilePictureContainer>
         <div className="image-profile">
-          <img
-            src={
-              this.props.profile
-            }
-            alt=""
-            //onClick={this.goToEditProfile.bind(this)}
-          />
+          <div className='img' style={{ backgroundImage: "url(" + this.props.profile + ")" }}/>
         </div>
         <div onClick={this._handleClick.bind(this)}>
           <input

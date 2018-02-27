@@ -13,16 +13,17 @@ import {
 export const ProfileContainer = styled.div`
   height: ${VIEW.FULL_VIEW_HIEGH};
   padding: ${PADDING.BIG_PADDING};
-  background-color: ${COLOR.PRIMARY};
+  background-color: ${COLOR.LIGHT_GRAY};
   > div {
     display: flex;
     background-color: white;
     padding: ${MARGIN.BIG_MARGIN};
     border-radius: ${BORDER.PRIMARY_RADIUS};
     flex-wrap: wrap;
+    width: 800px;
     > div {
         width: 300px;
-      margin-right: ${MARGIN.NORMAL_MARGIN};
+        margin-right: ${MARGIN.BIG_MARGIN};
     }
     @media screen and (max-width: 800px) {
       > div {
@@ -31,6 +32,7 @@ export const ProfileContainer = styled.div`
       }
     }
   }
+  
   @media screen and (max-width: ${SCREEN.TABLET}) {
     height: -webkit-fill-available;
   }
@@ -39,80 +41,44 @@ export const ProfileContainer = styled.div`
 export const ProfileDetailContainer = styled.div`
   display: flex;
   flex: 1;
-  > .name {
+  flex-direction: column;
+  .head {
     display: flex;
-    flex-direction: column;
-    width: ${VIEW.FULL};
-    padding: 0px 10px;
-    .line {
-      border: 1px solid ${COLOR.LIGHT_GRAY};
-    }
-    .edit {
-      justify-content: space-between;
-      > .icon-edit {
-        display: flex;
-        align-items: center;
-        > i {
-          cursor: pointer;
-          font-size: ${FONT.HEAD};
-        }
+    justify-content:space-between;
+    .title {
+      h2 {
+        margin: 0px 0px;
       }
     }
-    > div {
+    .edit-button {
       display: flex;
-      >div:first-child {
-        display: flex;
-        flex-basis: 20%;
+      align-items:center;
+      cursor: pointer;
+    }
+  }
+  .profile-detail {
+    .detail {
+      display: flex;
+      > div:first-child {
+        flex-basis: 150px;
       }
-      >div {
-        > p {
-          margin-left: ${MARGIN.NORMAL_MARGIN};
-          font-size:${FONT.NORMAL}
-          color: ${COLOR.DARK_GRAY}
-        }
-        >p:last-child {
-          color:${FONT.INPUT}
-        }
+      p {
+        margin: 5px 0px;
+        word-wrap: break-word;
       }
     }
   }
-  @media screen and (max-width: ${SCREEN.MOBILE}) {
-    .name {
-      > div {
-        > div:first-child {
-          flex-basis: 35%;
-        }
-        > div {       
-          p {
-            margin-left: 0;
-            font-size: ${FONT.SMALL}
-          }
-        }
-      }
-      padding: 0;
-      .edit {
-        > div {
-          flex: 1;
-        }
-        .title {
-          h2 {
-            font-size: ${FONT.SMALL}
-          }
-        }
-        .icon-edit {
-          justify-content: flex-end;
-          font-size: ${FONT.SMALL}
-        }
-      }
-    }
-  }
-
 `;
 
 export const ProfilePictureContainer = styled.div`
   .image-profile {
-    > img {
+    width: 300px;
+    height: 300px;
+    > .img {
       width: ${VIEW.FULL};
+      height: ${VIEW.FULL};
+      background-size: cover;
+      background-position: center;
     }
   }
 
@@ -127,3 +93,58 @@ export const ProfilePictureContainer = styled.div`
     color: ${COLOR.SECONARY};
   }
 `;
+
+
+export const EditProfileContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .edit-form {
+    width: 30%;
+    padding: 10px 0px;
+    > form {
+      > div {
+        margin: 10px 0px;
+        input {
+          height: 30px;
+          width: 98%;
+          border-radius: ${BORDER.INPUT_RADIUS};
+          border: 1px solid ${COLOR.DARK_GRAY};
+          text-indent: 10px;
+          font-size:${FONT.INPUT}
+        }
+        input[name='password'] {
+          display:none;
+        }
+      }
+      > button {
+        height: 30px;
+        width: 100%;
+        background-color: ${COLOR.DARK_GRAY};
+        color: ${COLOR.WHITE};
+        border:none;
+        border-radius: ${BORDER.INPUT_RADIUS};
+        cursor:pointer;
+      }
+    }
+  }
+  .edit-picture {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 50px;
+    .img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-size: cover;
+      background-position: center;
+    }
+    .text-change {
+      text-align: center;
+      border: 1px solid blue;
+      p {
+        cursor: pointer;
+      }
+    }
+  }
+`

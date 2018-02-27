@@ -2,6 +2,7 @@ import React from "react";
 import { SideBarContainer } from "../../theme/sidebar/sidebarTheme";
 import { Link } from "react-router";
 import { CenterComponent } from "../common/center-component/centercomponent";
+import { COLOR } from '../../constant/theme/constant'
 
 const headerLinks = [
   {
@@ -45,7 +46,8 @@ class SideBarContent extends React.Component {
                     key={index}
                     to={path}
                     activeStyle={{
-                      backgroundColor: "orange"
+                      backgroundColor: COLOR.BLUE,
+                      color: COLOR.DARK_GRAY
                     }}
                   >
                     {label}

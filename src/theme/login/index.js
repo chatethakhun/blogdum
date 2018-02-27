@@ -1,24 +1,38 @@
 import styled from 'styled-components'
-import { FONT } from '../../constant/theme/constant'
+import { FONT, COLOR } from '../../constant/theme/constant'
+import background from '../../img/bg1.jpeg'
+
 export const LoginContainer = styled.div`
     height: 100vh;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #4BC;
+    background-image: url(${background});
+    background-size: cover;
+    background-position: center;
+    @media screen and (max-width: 800px) {
+        display: flex; 
+        justify-content: center;
+        align-items: center;
+    }
 `
 
 
 export const LoginBox = styled.div`
     height: 300px;
     width: 500px;
-    background-color: white;
+    background-color: #fff;
     border-radius: 8px;
     display:flex;
     align-items:center;
     justify-content: center;
     flex-direction:  column;
     margin: 0px 15px;
+    position: absolute;
+    right: 15%;
+    top: 30%;
+
+    @media screen and (max-width: 800px) {
+        position: initial;
+    }
+
     @keyframes fade-in {
         from {
             opacity: 0;
@@ -80,14 +94,13 @@ export const LoginBox = styled.div`
        display:flex;
        flex-grow:1;
        margin-top:20px;
-       background-color: #89bdd3;
-       opacity: 0.5;
+       background-color: ${COLOR.BROWN};
        border-bottom-left-radius: 8px;
        border-bottom-right-radius: 8px;
        justify-content: center;
        align-items:center;
        > a {
-           color: #000;
+           color: ${COLOR.DARK_GRAY};
            text-decoration: none;
        }
    }
@@ -134,7 +147,7 @@ export const LoginFormContainer = styled.div`
             width: 80%;
             height: 40px;
             border: none;
-            background-color: #89bdd3;
+            background-color: ${COLOR.DARK_GRAY};
             color: white;
             border-radius: 4px;
             cursor: pointer;

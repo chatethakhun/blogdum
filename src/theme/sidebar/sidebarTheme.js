@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { COLOR } from '../../constant/theme/constant'
 
 export const SideBarContainer = styled.div`
 height: 100vh;
@@ -8,6 +9,8 @@ height: 100vh;
         > div {
             text-align: center;
             margin-top: 10px;
+            display: flex;
+            justify-content:center;
             .img {
                 border-radius: 50%;
                 width: 130px;
@@ -31,7 +34,7 @@ height: 100vh;
     }
     height: 100%;
     width: 150px;
-    background-color: #168d9e;
+    background-color: ${COLOR.DARK_GRAY};
     display:flex;
     flex-direction: column;
     .list {
