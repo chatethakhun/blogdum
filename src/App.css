@@ -23,12 +23,15 @@
 }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-
-.edit-modal  {
+.edit-modal {
   position: absolute;
   top: 40px;
   left: 210px;
@@ -49,7 +52,10 @@
   }
 }
 
-
 .ReactModal__Overlay--after-open {
   background-color: rgba(0, 0, 0, 0.75) !important;
+}
+
+button:disabled {
+  background-color: #999 !important;
 }

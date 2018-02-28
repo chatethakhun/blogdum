@@ -1,8 +1,9 @@
+import { LOCAL_ENDPOINT, PRODUCT_ENDPOINT } from '../../constant/apollo/constant'
+
+import { CenterComponent } from "../common/center-component/centercomponent";
+import { ProfilePictureContainer } from "../../theme/profile/profile-theme";
 import React from "react";
 import axios from 'axios'
-import { PRODUCT_ENDPOINT, LOCAL_ENDPOINT } from '../../constant/apollo/constant'
-import { ProfilePictureContainer } from "../../theme/profile/profile-theme";
-import { CenterComponent } from "../common/center-component/centercomponent";
 
 class PictureProfile extends React.Component {
   constructor() {
@@ -39,23 +40,11 @@ class PictureProfile extends React.Component {
   };
 
   render() {
+    console.log('profile ===> ', this.props)
     return (
       <ProfilePictureContainer>
         <div className="image-profile">
           <div className='img' style={{ backgroundImage: "url(" + this.props.profile + ")" }}/>
-        </div>
-        <div onClick={this._handleClick.bind(this)}>
-          <input
-            ref="fileField"
-            type="file"
-            accept=".jpg,.jpeg,.png"
-            onChange={this.onChange.bind(this)}
-          />
-          {!this.state.isLoading ? (
-            <p>Click to update picture profile</p>
-          ) : (
-            <CenterComponent loading />
-          )}
         </div>
       </ProfilePictureContainer>
     );

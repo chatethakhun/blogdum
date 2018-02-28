@@ -37,7 +37,6 @@ class Profile extends React.Component {
     this.setState({
       modalIsOpen: false
     });
-    window.location.reload();
   }
 
   componentWillReceiveProps(nextProps) {

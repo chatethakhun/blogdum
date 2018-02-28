@@ -1,14 +1,14 @@
-import styled from "styled-components";
-
 import {
-  VIEW,
-  MARGIN,
+  BORDER,
   COLOR,
   FONT,
-  BORDER,
+  MARGIN,
   PADDING,
-  SCREEN
+  SCREEN,
+  VIEW
 } from "../../constant/theme/constant";
+
+import styled from "styled-components";
 
 export const ProfileContainer = styled.div`
   height: ${VIEW.FULL_VIEW_HIEGH};
@@ -101,7 +101,6 @@ export const EditProfileContainer = styled.div`
   align-items: center;
   .edit-form {
     width: 30%;
-    padding: 10px 0px;
     > form {
       > div {
         margin: 10px 0px;
@@ -141,10 +140,28 @@ export const EditProfileContainer = styled.div`
     }
     .text-change {
       text-align: center;
-      border: 1px solid blue;
       p {
         cursor: pointer;
       }
     }
+  }
+`
+
+export const Wrapper = styled.div`
+  text-align:center;
+  .image {
+    background-position:center;
+    background-size:cover;
+    width:300px;
+    height:300px;
+  }
+  >input[type='file'] {
+    display:none;
+  }
+  p {
+    cursor: pointer;
+  }
+  p:hover {
+    color: blue;
   }
 `
