@@ -7,7 +7,6 @@ import Formsy from "formsy-react-es6";
 import { PRODUCT_ENDPOINT } from '../../constant/apollo/constant'
 import PictureProfile from '../../component/profile/picture-profile'
 import React from "react";
-import RegisterForm from "../../component/register/register-form";
 import Text from "../../component/common/input/text";
 import { Wrapper } from '../../theme/profile/profile-theme'
 import axios from 'axios'
