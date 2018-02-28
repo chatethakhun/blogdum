@@ -1,15 +1,13 @@
-import React from 'react'
 import {
-    Route,
-    Redirect
-  } from 'react-router-dom'
-  
-  
+    Redirect,
+    Route
+} from 'react-router-dom'
 
+import React from 'react'
 
 export const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route {...rest} render={props => {
-      console.log("TOKEN_AUTH ====>", localStorage.getItem("token"))
+     // console.log("TOKEN_AUTH ====>", localStorage.getItem("token"))
       return (
           (localStorage.getItem("token") !== null) ? (
             <Component {...props}/>

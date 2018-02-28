@@ -75,7 +75,6 @@ const enhance = compose(
     },
     onChangeImage: props => event => {
       const image = event.target.files[0];
-      console.log(image)
       const formData = new FormData();
       formData.append("file", image);
       const config = {
@@ -87,7 +86,6 @@ const enhance = compose(
       axios
         .post(PRODUCT_ENDPOINT + "v1/upload", formData, config)
         .then(res => {
-          console.log("response ====> ", res);
           props.changeImageProfie(res.data.url);
           props.changeCanSubmit(true)
         });
@@ -95,7 +93,6 @@ const enhance = compose(
   }),
   lifecycle({
     componentWillMount() {
-      console.log('did mount prop ===>' ,this.props)
       this.props.changeImageProfie(this.props.me.imageUrl)
       //this.props.changeImageProfile(this.props.me.imageUrl)
     }
@@ -104,7 +101,6 @@ const enhance = compose(
 
 const EditProfile = props => (
   <EditProfileContainer>
-    {console.log("props ===>", props)}
     <ImageProfile _handleClick={props._handleClick} 
                   onChangeImage={props.onChangeImage} 
                   profileImage={props.imgProfile}/>
@@ -156,75 +152,3 @@ class ImageProfile extends React.Component {
     )
   }
 }
-
-// class EditProfile extends React.Component {
-//   constructor() {
-//     super();
-//     this.state = {
-//       me: ""
-//     };
-//   }
-
-//   componentWillReceiveProps(nextProps) {
-//     console.log("nextprops ===>", nextProps.initialValues);
-//     if (nextProps.initialValues) {
-//       this.setState({
-//         me: nextProps.initialValues
-//       });
-//     }
-//   }
-
-//   onSubmit = () => {};
-//   render() {
-//     console.log(" edit profile props", this.props);
-//     console.log(" edit profile state", this.state);
-//     return (
-//       <EditProfileContainer>
-//         <div
-//           className="edit-picture"
-//           style={{
-//             border: "1px solid red"
-//           }}
-//         >
-//           <div
-//             className="img"
-//             style={{
-//               backgroundImage: `url(${this.state.me.imageUrl})`
-//             }}
-//           />
-//           <div className="text-change">
-//             <p>Click to change profile</p>
-//           </div>
-//         </div>
-//         <div
-//           className="edit-form"
-//           style={{
-//             border: "1px solid green"
-//           }}
-//         >
-//           <RegisterForm
-//             handleSubmit={this.props.handleSubmit}
-//             onSubmit={this.onSubmit}
-//             initialValues={this.state.me}
-//             loadMe={this.props.load}
-//           />
-//         </div>
-//       </EditProfileContainer>
-//     );
-//   }
-// }
-
-// const formConfiguration = {
-//   form: "edit-form"
-// };
-
-// EditProfile = reduxForm(formConfiguration)(EditProfile);
-
-// EditProfile = connect(
-//   state => ({
-//     initialValues: state.me.me.me //// set initial data from load
-//   }),
-//   { load: setMe } /// setme is action for set initial data
-// )(EditProfile);
-
-// export default EditProfile;

@@ -1,12 +1,12 @@
-import React from "react";
-import Sidebar from "react-sidebar";
-import { setMe } from "../../action/member";
-import { connect } from "react-redux";
-import { NavLink } from "../../component/common/navlink/navlink";
-import { graphql } from "react-apollo";
-import gql from "graphql-tag";
 import { CenterComponent } from "../../component/common/center-component/centercomponent"
+import { NavLink } from "../../component/common/navlink/navlink";
+import React from "react";
 import SideBarContent from '../../component/sidebar/sidebarcontent'
+import Sidebar from "react-sidebar";
+import { connect } from "react-redux";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
+import { setMe } from "../../action/member";
 
 const mql = window.matchMedia(`(min-width: 800px)`);
 
@@ -23,7 +23,6 @@ class Sidebars extends React.Component {
   }
   componentWillMount() {
     if (!localStorage.getItem('token')) {
-      console.log('have toke')
       this.props.router.push("/");
     }
     mql.addListener(this.mediaQueryChanged);

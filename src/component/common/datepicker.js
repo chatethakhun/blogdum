@@ -1,8 +1,9 @@
-import React from "react"
-import DatePicker from "react-datepicker"
-import moment from "moment"
 import 'react-datepicker/dist/react-datepicker.css'
+
+import DatePicker from "react-datepicker"
 import { DatepickerContainer } from "../../theme/common/datepicker/date-picker-theme";
+import React from "react"
+import moment from "moment"
 
 export default class Datepicker extends React.Component {
   constructor() {
@@ -20,7 +21,6 @@ export default class Datepicker extends React.Component {
   }
 
   render() {
-    console.log('props datepicker ====> ', this.props)
     return (
       <DatepickerContainer>
         <DatePicker 

@@ -48,7 +48,6 @@ class Profile extends React.Component {
   }
 
   render() {
-    console.log("state profile", this.state);
     return (
       <ProfileContainer>
         {this.state.me ? (

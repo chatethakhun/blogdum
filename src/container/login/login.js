@@ -1,14 +1,16 @@
-import React from "react";
-import { LoginForm } from "../../component/login/login-form";
-import { LoginContainer, LoginBox } from "../../theme/login";
-import { reduxForm } from "redux-form";
+import { LoginBox, LoginContainer } from "../../theme/login";
+import {
+  REQUEST_FETCH_SERVER,
+  SET_INITTAIL
+} from '../../constant/redux/constant'
+
 import { Link } from "react-router";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import { LoginForm } from "../../component/login/login-form";
+import React from "react";
 import { auth } from "../../action/login";
-import { 
-  SET_INITTAIL,
-  REQUEST_FETCH_SERVER } from '../../constant/redux/constant'
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { reduxForm } from "redux-form";
 
 class Login extends React.Component {
   constructor() {
@@ -43,7 +45,6 @@ class Login extends React.Component {
 
 
   render() {
-    console.log('env =====>', process.env)
     const { handleSubmit } = this.props;
     return (
       <LoginContainer>

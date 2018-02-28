@@ -30,7 +30,6 @@ class PictureProfile extends React.Component {
     axios
       .post(PRODUCT_ENDPOINT + "v1/upload", formData, config)
       .then(res => {
-        console.log("response ====> ", res);
         this.setState({
           isLoading: false,
           imageUrl: res.data.url
@@ -40,7 +39,6 @@ class PictureProfile extends React.Component {
   };
 
   render() {
-    console.log('profile ===> ', this.props)
     return (
       <ProfilePictureContainer>
         <div className="image-profile">
