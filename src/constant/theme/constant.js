@@ -31,7 +31,8 @@ export const COLOR = {
   DARK_GRAY: "#312c32",
   WHITE: "#feffff",
   BLUE: "#ea8127",
-  BROWN: "#daad86"
+  BROWN: "#daad86",
+  MEDIUM_GRAY: "#a6a6a6"
 };
 
 export const BORDER = {

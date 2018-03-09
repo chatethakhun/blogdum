@@ -20,10 +20,10 @@ export const ProfileContainer = styled.div`
     padding: ${MARGIN.BIG_MARGIN};
     border-radius: ${BORDER.PRIMARY_RADIUS};
     flex-wrap: wrap;
-    width: 800px;
+    max-width: 800px;
     > div {
-        width: 300px;
-        margin-right: ${MARGIN.BIG_MARGIN};
+      width: 300px;
+      margin-right: ${MARGIN.BIG_MARGIN};
     }
     @media screen and (max-width: 800px) {
       > div {
@@ -32,7 +32,7 @@ export const ProfileContainer = styled.div`
       }
     }
   }
-  
+
   @media screen and (max-width: ${SCREEN.TABLET}) {
     height: -webkit-fill-available;
   }
@@ -42,9 +42,12 @@ export const ProfileDetailContainer = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
+  @media screen and (max-width: ${SCREEN.TABLET}) {
+    margin-top: 10px !important;
+  }
   .head {
     display: flex;
-    justify-content:space-between;
+    justify-content: space-between;
     .title {
       h2 {
         margin: 0px 0px;
@@ -52,7 +55,7 @@ export const ProfileDetailContainer = styled.div`
     }
     .edit-button {
       display: flex;
-      align-items:center;
+      align-items: center;
       cursor: pointer;
     }
   }
@@ -65,6 +68,9 @@ export const ProfileDetailContainer = styled.div`
       p {
         margin: 5px 0px;
         word-wrap: break-word;
+        @media screen and (max-width: ${SCREEN.TABLET}) {
+          font-size: 14px;
+        }
       }
     }
   }
@@ -74,6 +80,9 @@ export const ProfilePictureContainer = styled.div`
   .image-profile {
     width: 300px;
     height: 300px;
+    @media screen and (max-width: ${SCREEN.TABLET}) {
+      width: 100%;
+    }
     > .img {
       width: ${VIEW.FULL};
       height: ${VIEW.FULL};
@@ -94,13 +103,18 @@ export const ProfilePictureContainer = styled.div`
   }
 `;
 
-
 export const EditProfileContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   .edit-form {
-    width: 30%;
+    width: 50%;
+    @media screen and (max-width: ${SCREEN.LARGE_TABLET}) {
+      width: 70%;
+    }
+    @media screen and (max-width: ${SCREEN.TABLET}) {
+      width: 100%;
+    }
     > form {
       > div {
         margin: 10px 0px;
@@ -110,10 +124,10 @@ export const EditProfileContainer = styled.div`
           border-radius: ${BORDER.INPUT_RADIUS};
           border: 1px solid ${COLOR.DARK_GRAY};
           text-indent: 10px;
-          font-size:${FONT.INPUT}
+          font-size: ${FONT.INPUT};
         }
-        input[name='password'] {
-          display:none;
+        input[name="password"] {
+          display: none;
         }
       }
       > button {
@@ -121,9 +135,9 @@ export const EditProfileContainer = styled.div`
         width: 100%;
         background-color: ${COLOR.DARK_GRAY};
         color: ${COLOR.WHITE};
-        border:none;
+        border: none;
         border-radius: ${BORDER.INPUT_RADIUS};
-        cursor:pointer;
+        cursor: pointer;
       }
     }
   }
@@ -145,18 +159,18 @@ export const EditProfileContainer = styled.div`
       }
     }
   }
-`
+`;
 
 export const Wrapper = styled.div`
-  text-align:center;
+  text-align: center;
   .image {
-    background-position:center;
-    background-size:cover;
-    width:300px;
-    height:300px;
+    background-position: center;
+    background-size: cover;
+    width: 300px;
+    height: 300px;
   }
-  >input[type='file'] {
-    display:none;
+  > input[type="file"] {
+    display: none;
   }
   p {
     cursor: pointer;
@@ -164,4 +178,4 @@ export const Wrapper = styled.div`
   p:hover {
     color: blue;
   }
-`
+`;

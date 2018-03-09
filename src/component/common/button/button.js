@@ -1,12 +1,26 @@
+import { ButtonTheme } from "../../../theme/common/button/button-theme";
 import React from "react";
 
-export const ButtonComponent = ({ children, loading, onClick, disabled }) =>
+export const ButtonComponent = ({
+  children,
+  loading,
+  onClick,
+  disabled,
+  width,
+  bgColor
+}) =>
   loading ? (
-    <button>
+    <ButtonTheme width={width} bgColor={bgColor}>
       <i className="fas fa-spinner fa-spin" />
-    </button>
+    </ButtonTheme>
   ) : (
-    <button type="submit" disabled={disabled}>
+    <ButtonTheme
+      type="submit"
+      disabled={disabled}
+      width={width}
+      onClick={onClick}
+      bgColor={bgColor}
+    >
       {children}
-    </button>
+    </ButtonTheme>
   );

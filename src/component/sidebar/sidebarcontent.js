@@ -1,8 +1,8 @@
+import { COLOR } from "../../constant/theme/constant";
+import { CenterComponent } from "../common/center-component/centercomponent";
+import { Link } from "react-router";
 import React from "react";
 import { SideBarContainer } from "../../theme/sidebar/sidebarTheme";
-import { Link } from "react-router";
-import { CenterComponent } from "../common/center-component/centercomponent";
-import { COLOR } from '../../constant/theme/constant'
 
 const headerLinks = [
   {
@@ -10,8 +10,8 @@ const headerLinks = [
     path: "profile"
   },
   {
-    label: "Community",
-    path: "/income"
+    label: "Blogs",
+    path: "blog"
   }
 ];
 
@@ -27,9 +27,16 @@ class SideBarContent extends React.Component {
             </div>
             <div className="profile">
               <div>
-                {this.props.me ? this.props.me.imageUrl && (
-                  <div className='img' style={{ backgroundImage: "url(" + this.props.me.imageUrl + ")" }}/>
-                ):""}
+                {this.props.me
+                  ? this.props.me.imageUrl && (
+                      <div
+                        className="img"
+                        style={{
+                          backgroundImage: "url(" + this.props.me.imageUrl + ")"
+                        }}
+                      />
+                    )
+                  : ""}
               </div>
               <div>
                 <p>

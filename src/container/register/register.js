@@ -1,7 +1,3 @@
-import {
-  REQUEST_FETCH_SERVER,
-  SET_INITTAIL
-} from "../../constant/redux/constant";
 import { compose, lifecycle, withHandlers, withState } from "recompose";
 import { register, requestServer } from "../../action/login";
 

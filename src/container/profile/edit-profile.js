@@ -1,15 +1,14 @@
 import { compose, lifecycle, withHandlers, withState } from "recompose";
 
 import { ButtonComponent } from "../../component/common/button/button";
-import { CenterComponent } from '../../component/common/center-component/centercomponent'
+import { CenterComponent } from "../../component/common/center-component/centercomponent";
 import { EditProfileContainer } from "../../theme/profile/profile-theme";
 import Formsy from "formsy-react-es6";
-import { PRODUCT_ENDPOINT } from '../../constant/apollo/constant'
-import PictureProfile from '../../component/profile/picture-profile'
+import { PRODUCT_ENDPOINT } from "../../constant/apollo/constant";
 import React from "react";
 import Text from "../../component/common/input/text";
-import { Wrapper } from '../../theme/profile/profile-theme'
-import axios from 'axios'
+import { Wrapper } from "../../theme/profile/profile-theme";
+import axios from "axios";
 import { connect } from "react-redux";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
@@ -41,7 +40,7 @@ const enhance = compose(
   }),
   graphql(updateProfile),
   withState("canSubmit", "changeCanSubmit", false),
-  withState("imgProfile","changeImageProfie",''),
+  withState("imgProfile", "changeImageProfie", ""),
   withHandlers({
     enableButton: props => model => {
       if (
@@ -65,7 +64,8 @@ const enhance = compose(
           }
         })
         .then(res => {
-          window.location.reload();
+          // window.location.reload();
+          props.refetch();
         });
     },
     _handleClick: props => event => {
@@ -82,17 +82,15 @@ const enhance = compose(
           authorization: `Bearer ${localStorage.getItem("token")}`
         }
       };
-      axios
-        .post(PRODUCT_ENDPOINT + "v1/upload", formData, config)
-        .then(res => {
-          props.changeImageProfie(res.data.url);
-          props.changeCanSubmit(true)
-        });
+      axios.post(PRODUCT_ENDPOINT + "v1/upload", formData, config).then(res => {
+        props.changeImageProfie(res.data.url);
+        props.changeCanSubmit(true);
+      });
     }
   }),
   lifecycle({
     componentWillMount() {
-      this.props.changeImageProfie(this.props.me.imageUrl)
+      this.props.changeImageProfie(this.props.me.imageUrl);
       //this.props.changeImageProfile(this.props.me.imageUrl)
     }
   })
@@ -100,12 +98,12 @@ const enhance = compose(
 
 const EditProfile = props => (
   <EditProfileContainer>
-    <ImageProfile _handleClick={props._handleClick} 
-                  onChangeImage={props.onChangeImage} 
-                  profileImage={props.imgProfile}/>
-    <div
-      className="edit-form"
-    >
+    <ImageProfile
+      _handleClick={props._handleClick}
+      onChangeImage={props.onChangeImage}
+      profileImage={props.imgProfile}
+    />
+    <div className="edit-form">
       <Formsy.Form onValidSubmit={props.submit} onChange={props.enableButton}>
         <div>
           <Text name="fname" value={props.me.fname} />
@@ -124,30 +122,32 @@ const EditProfile = props => (
 
 export default enhance(EditProfile);
 
-
 class ImageProfile extends React.Component {
-  _handleClick  = () => {
+  _handleClick = () => {
     const inputField = this.refs.fileField; //Click Text To Upload Picture
     inputField.click();
-  }
-  render(){
-    return(
+  };
+  render() {
+    return (
       <Wrapper onClick={this._handleClick.bind(this)}>
-      <div className='image' style={{
-        backgroundImage:`url(${this.props.profileImage})`
-      }} />
-      <input
-        ref="fileField"
-        type="file"
-        accept=".jpg,.jpeg,.png"
-        onChange={this.props.onChangeImage}
-      />
-      {!false ? (
-        <p>Click to update picture profile</p>
-      ) : (
-        <CenterComponent loading />
-      )}
-    </Wrapper> 
-    )
+        <div
+          className="image"
+          style={{
+            backgroundImage: `url(${this.props.profileImage})`
+          }}
+        />
+        <input
+          ref="fileField"
+          type="file"
+          accept=".jpg,.jpeg,.png"
+          onChange={this.props.onChangeImage}
+        />
+        {!false ? (
+          <p>Click to update picture profile</p>
+        ) : (
+          <CenterComponent loading />
+        )}
+      </Wrapper>
+    );
   }
 }

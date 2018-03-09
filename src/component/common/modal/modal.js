@@ -1,5 +1,4 @@
 import Modal from "react-modal";
-import Profile from "../../../container/profile/profile";
 import React from "react";
 
 class ModalComponent extends React.Component {

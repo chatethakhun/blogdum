@@ -1,22 +1,23 @@
-import React, { Component } from 'react'
 import './App.css';
-import { Router, Route, browserHistory, IndexRoute } from 'react-router'
-import { ApolloProvider } from 'react-apollo';
-import client from './constant/apollo/config'
-import { Provider } from 'react-redux'
-import store from './reducers/rootReducer'
 
-//============== Container 
-import Login from './container/login/login'
-import Register from './container/register/register'
-import Dashboard from './container/dashboard/dashboard'
-import NotFound from './container/notfound/notfound'
+import { IndexRoute, Route, Router, browserHistory } from 'react-router'
+import React, { Component } from 'react'
+
 // import Members from './container/dashboard/member'
 import AddIncome from './container/income/add-income'
-import Profile from './container/profile/profile'
+import { ApolloProvider } from 'react-apollo';
+import Dashboard from './container/dashboard/dashboard'
 import EditProfile from './container/profile/edit-profile'
+//============== Container 
+import Login from './container/login/login'
+import MyBlog from './container/blog/myblog';
+import NotFound from './container/notfound/notfound'
+import Profile from './container/profile/profile'
+import { Provider } from 'react-redux'
+import Register from './container/register/register'
 import Sidebars from './container/sidebar/sidebar'
-
+import client from './constant/apollo/config'
+import store from './reducers/rootReducer'
 
 const headDetail = [{
   label: 'Add Incom',
@@ -44,6 +45,9 @@ class App extends Component {
             <Route path='profile' component={Sidebars} >
               <IndexRoute component={Profile} />
               <Route path='/profile/edit' component={EditProfile}/>
+            </Route>
+            <Route path='blog' component={Sidebars}>
+              <IndexRoute component={MyBlog} />
             </Route>
             <Route path='member' component={Dashboard} />
             <Route path="*" component={NotFound}/>

@@ -1,6 +1,5 @@
 import { CenterComponent } from "../../component/common/center-component/centercomponent";
 import EditProfile from "./edit-profile";
-import Modal from "react-modal";
 import ModalComponent from "../../component/common/modal/modal";
 import PictureProfile from "../../component/profile/picture-profile";
 import { ProfileContainer } from "../../theme/profile/profile-theme";
@@ -23,8 +22,9 @@ class Profile extends React.Component {
   }
 
   updateProfile = imageUrl => {
+    console.log("refetch");
     this.props.mutate({ variables: { imageUrl } }).then(() => {
-      window.location.reload();
+      //window.location.reload();
     });
   };
   gotoEditProfile = () => {
@@ -39,10 +39,13 @@ class Profile extends React.Component {
     });
   }
 
+  refetch = () => {
+    window.location.reload();
+  };
   componentWillReceiveProps(nextProps) {
-    if (nextProps.profile.me) {
+    if (nextProps.me) {
       this.setState({
-        me: nextProps.profile.me.me
+        me: nextProps.me
       });
     }
   }
@@ -50,17 +53,19 @@ class Profile extends React.Component {
   render() {
     return (
       <ProfileContainer>
-        {this.state.me ? (
-          <div>
-            <PictureProfile
-              profile={this.state.me.imageUrl}
-              updateProfile={imageUrl => this.updateProfile(imageUrl)}
-            />
-            <ProfileDetail
-              me={this.state.me}
-              gotoEditProfile={this.gotoEditProfile}
-            />
-          </div>
+        {this.props.me ? (
+          this.props.me && (
+            <div>
+              <PictureProfile
+                profile={this.props.me.imageUrl}
+                updateProfile={imageUrl => this.updateProfile(imageUrl)}
+              />
+              <ProfileDetail
+                me={this.props.me}
+                gotoEditProfile={this.gotoEditProfile}
+              />
+            </div>
+          )
         ) : (
           <CenterComponent loading />
         )}
@@ -71,7 +76,7 @@ class Profile extends React.Component {
           baseClassName="edit-modal"
           afterOpenClassName="edit-modal-opened"
         >
-          <EditProfile />
+          <EditProfile refetch={this.refetch.bind(this)} />
         </ModalComponent>
       </ProfileContainer>
     );
@@ -79,7 +84,7 @@ class Profile extends React.Component {
 }
 
 const mapState = state => ({
-  profile: state.me
+  me: state.me.me.me
 });
 
 const UPDATE_PROFILE = gql`

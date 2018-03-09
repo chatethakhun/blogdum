@@ -1,9 +1,7 @@
-import { LOCAL_ENDPOINT, PRODUCT_ENDPOINT } from '../../constant/apollo/constant'
-
-import { CenterComponent } from "../common/center-component/centercomponent";
+import { PRODUCT_ENDPOINT } from "../../constant/apollo/constant";
 import { ProfilePictureContainer } from "../../theme/profile/profile-theme";
 import React from "react";
-import axios from 'axios'
+import axios from "axios";
 
 class PictureProfile extends React.Component {
   constructor() {
@@ -27,27 +25,27 @@ class PictureProfile extends React.Component {
         authorization: `Bearer ${localStorage.getItem("token")}`
       }
     };
-    axios
-      .post(PRODUCT_ENDPOINT + "v1/upload", formData, config)
-      .then(res => {
-        this.setState({
-          isLoading: false,
-          imageUrl: res.data.url
-        });
-        this.props.updateProfile(this.state.imageUrl);
+    axios.post(PRODUCT_ENDPOINT + "v1/upload", formData, config).then(res => {
+      this.setState({
+        isLoading: false,
+        imageUrl: res.data.url
       });
+      this.props.updateProfile(this.state.imageUrl);
+    });
   };
 
   render() {
     return (
       <ProfilePictureContainer>
         <div className="image-profile">
-          <div className='img' style={{ backgroundImage: "url(" + this.props.profile + ")" }}/>
+          <div
+            className="img"
+            style={{ backgroundImage: "url(" + this.props.profile + ")" }}
+          />
         </div>
       </ProfilePictureContainer>
     );
   }
 }
 
-
-export default PictureProfile
+export default PictureProfile;

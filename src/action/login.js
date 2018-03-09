@@ -5,8 +5,8 @@ import {
   REGISTER_SUCCESS,
   REQUEST_FETCH_SERVER
 } from "../constant/redux/constant";
-import { LOCAL_ENDPOINT, PRODUCT_ENDPOINT } from "../constant/apollo/constant";
 
+import { PRODUCT_ENDPOINT } from "../constant/apollo/constant";
 import axios from "axios";
 import { push } from "react-router-redux";
 
