@@ -114,7 +114,7 @@ const enhance = compose(
 );
 
 const MyBlog = props => (
-  <Wrapper height="calc(100% - 90px)">
+  <Wrapper>
     <CreastePost handlePopup={props.handleOpenPopup} />
     <Popup
       isOpen={props.popupOpen}
