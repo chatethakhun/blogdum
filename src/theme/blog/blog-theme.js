@@ -84,7 +84,7 @@ export const HeaderPost = styled.div`
 export const ContentContainer = styled.div`
   .image {
     img {
-      max-height: 300px;
+      width: 100%;
     }
   }
   .content {
