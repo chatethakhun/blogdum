@@ -1,13 +1,26 @@
 import { compose, withHandlers, withState } from "recompose";
-
+import { CenterComponent } from '../common/center-component/centercomponent'
 import ConfirmDialog from "../common/confirmDialog";
 import { Content } from "./content";
 import Header from "./header";
 import Popup from "../../component/common/pop-up/pop-up";
 import React from "react";
 import { Wrapper } from "../../theme/common/wrapper/wrapper";
+import gql  from 'graphql-tag'
+import  { graphql, withApollo } from "react-apollo";
+
+const deletePost = gql`
+  mutation deletePost($id: ID) {
+    deletePost(id: $id) {
+      status
+      message
+    }
+  }
+`
 
 const enhance = compose(
+  graphql(deletePost),
+  withApollo,
   withState("isOpen", "changeOpen", false),
   withHandlers({
     isClose: props => () => {
@@ -18,7 +31,15 @@ const enhance = compose(
     },
     onSubmit: props => event => {
       props.changeOpen(false);
-      console.log(props.post);
+      props.mutate({
+        variables: {
+          id: props.post.id 
+        }
+      }).then(res => {
+        if(res.data.deletePost.status) {
+          window.location.reload()
+        }
+      })
     },
     onCancel: props => event => {
       props.changeOpen(false);

@@ -40,9 +40,6 @@ const Header = props => (
         </ui>
       </div>
       <div className="edit-delete">
-        <button onClick={props.onEdit}>
-          <i className="fas fa-pencil-alt" />
-        </button>
         <button onClick={props.onDelete}>
           <i className="fas fa-trash-alt" />
         </button>
