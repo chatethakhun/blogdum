@@ -25,7 +25,7 @@ const creastePost = gql`
 `;
 
 const getPost = gql`
-  query post  ($skip: Int!){
+  query post  ($skip: Int){
     getPost(limit: 5 ,skip: $skip) {
       id
       image
@@ -57,6 +57,11 @@ const enhance = compose(
   withState("post", "setPost", null),
   withState("isLoading", "changeIsLoad", false),
   withState('skip', 'changeSkip', 1),
+  withHandlers({
+    updateFeed: props => newFeed => {
+      props.setPost(newFeed)
+    }
+  }),
   withHandlers({
     handleOpenPopup: props => () => {
       props.isOpen(!props.popupOpen);
@@ -90,7 +95,11 @@ const enhance = compose(
             .then(res => {
               props.changeIsLoad(false);
               if (res.data.createPost.status) {
-                window.location.reload();
+                props.isOpen(false)
+                props.data.refetch()
+                .then(({data}) => {
+                  props.updateFeed(data.getPost)
+                })
               }
             });
         });
@@ -106,11 +115,11 @@ const enhance = compose(
           .then(res => {
             props.changeIsLoad(false);
             if (res.data.createPost.status) {
-              console.log(props)
-              props.data.refetch()
-              props.setPost(props.post)
               props.isOpen(false)
-              //window.location.reload();
+              props.data.refetch()
+              .then(({data}) => {
+                props.updateFeed(data.getPost)
+              })
             }
           });
       }
@@ -123,6 +132,11 @@ const enhance = compose(
     },
     getImage: props => image => {
       props.setImage(image);
+    },
+    refetch: ( props ) => () => {
+        props.data.refetch().then(res => {
+        props.updateFeed(res.data.getPost)
+      })
     },
     handleScroll: props => event => { 
       const feed = document.getElementById('feed').scrollHeight
@@ -200,7 +214,7 @@ const MyBlog = props => (
     {
       !props.data.loading
       ? props.post && props.post.map((post, index) => (
-          <Feed key={index} post={post} me={props.me} id='feed' />
+          <Feed key={index} post={post} me={props.me} id='feed' refetch={props.refetch}/>
         ))
       : <CenterComponent loading/>}
     </div>

@@ -37,7 +37,9 @@ const enhance = compose(
         }
       }).then(res => {
         if(res.data.deletePost.status) {
-          window.location.reload()
+          console.log(props)
+          props.refetch()
+          //window.location.reload()
         }
       })
     },

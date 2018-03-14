@@ -12,7 +12,6 @@ const enhance = compose(
     },
     onDelete: props => event => {
       event.preventDefault();
-      console.log(props);
       props.openPopup();
     }
   })
