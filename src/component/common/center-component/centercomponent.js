@@ -2,16 +2,17 @@ import React from 'react'
 import { CenterContainer } from '../../../theme/common/center-component/center-component-theme'
 
 
-export const CenterComponent = ({ title, status, onHandleClick, loading }) => (
-    <CenterContainer>
+export const CenterComponent = props => (
+    <CenterContainer height={props.height}>
     {   
-        !loading ? 
+        !props.loading ? 
             <div>
+                
                 <div className="title">
-                    <h1>{title}</h1>
+                    <h1>{props.title}</h1>
                 </div>
                 {
-                    status && status === 404 && <div><button onClick={() => onHandleClick()}>Back</button></div>
+                    props.status && props.status === 404 && <div><button onClick={() => props.onHandleClick()}>Back</button></div>
                 }
             </div>:
             <i className="fas fa-spinner fa-spin"></i>

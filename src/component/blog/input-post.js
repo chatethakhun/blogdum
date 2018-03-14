@@ -1,4 +1,4 @@
-import { compose, lifecycle, withHandlers, withState } from "recompose";
+import { compose, withHandlers, withState } from "recompose";
 
 import { ButtonComponent } from "../common/button/button";
 import ButtonUploadImage from "../common/button/button-upload-image";

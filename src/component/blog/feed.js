@@ -1,9 +1,7 @@
 import { compose, withHandlers, withState } from "recompose";
-import { CenterComponent } from '../common/center-component/centercomponent'
 import ConfirmDialog from "../common/confirmDialog";
 import { Content } from "./content";
 import Header from "./header";
-import Popup from "../../component/common/pop-up/pop-up";
 import React from "react";
 import { Wrapper } from "../../theme/common/wrapper/wrapper";
 import gql  from 'graphql-tag'

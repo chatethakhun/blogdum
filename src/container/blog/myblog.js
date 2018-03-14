@@ -13,7 +13,6 @@ import axios from "axios";
 import { connect } from "react-redux";
 import gql from "graphql-tag";
 import { graphql, withApollo } from "react-apollo";
-import ReactDOM from 'react-dom'
 import { CenterComponent } from "../../component/common/center-component/centercomponent";
 const creastePost = gql`
   mutation createPost($image: String, $title: String!, $description: String!) {
@@ -73,6 +72,7 @@ const enhance = compose(
     },
     submit: props => formData => {
       props.changeIsLoad(true);
+      // check image file 
       if (props.fileImage) {
         const form = new FormData();
         form.append("file", props.fileImage);
@@ -139,8 +139,8 @@ const enhance = compose(
       })
     },
     handleScroll: props => event => { 
+      // scroll to bottom then fetch data
       const feed = document.getElementById('feed').scrollHeight
-      const body = document.body
       const html = document.documentElement;
       if((event.target.scrollTop + html.clientHeight) >= feed) {
         props.changeIsLoad(true)
@@ -173,6 +173,7 @@ const enhance = compose(
   }),
   lifecycle({
     componentDidMount(){
+      //add handle scroll 
       window.addEventListener('scroll', this.props.handleScroll, true)
     },
     componentWillReceiveProps(nextProps) {
@@ -180,6 +181,10 @@ const enhance = compose(
       if (this.props.data.networkStatus === 1 && nextProps.data.networkStatus === 7) { 
         nextProps.setPost(nextProps.data.getPost)
       }
+    },
+    componentWillUnmount() {
+      //must have this
+      window.removeEventListener('scroll', this.props.handleScroll, true)
     }
   })
 );
@@ -216,10 +221,10 @@ const MyBlog = props => (
       ? props.post && props.post.map((post, index) => (
           <Feed key={index} post={post} me={props.me} id='feed' refetch={props.refetch}/>
         ))
-      : <CenterComponent loading/>}
+      : <CenterComponent loading height='100vh'/>}
     </div>
     {
-      props.isLoading  && <CenterComponent loading/>
+      props.isLoading  && <CenterComponent loading />
     }
   </Wrapper>
 );
