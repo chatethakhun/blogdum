@@ -9,4 +9,19 @@ export const Wrapper = styled.div`
   background-color: ${props => props.bgColor || COLOR.LIGHT_GRAY};
   border-radius: ${props => props.borderRadius || null};
   margin: ${props => props.margin || null};
+  
+
+  animation: ${props => props.animation || null };
+
+
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateV(0%);
+    }
+  }
 `;

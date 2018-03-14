@@ -93,11 +93,11 @@ const enhance = compose(
               refetchQueries: [ { query: getPost }]
             })
             .then(res => {
-              props.changeIsLoad(false);
               if (res.data.createPost.status) {
-                props.isOpen(false)
                 props.data.refetch()
                 .then(({data}) => {
+                  props.changeIsLoad(false);
+                  props.isOpen(false)
                   props.updateFeed(data.getPost)
                 })
               }
@@ -113,11 +113,11 @@ const enhance = compose(
             },
           })
           .then(res => {
-            props.changeIsLoad(false);
             if (res.data.createPost.status) {
-              props.isOpen(false)
               props.data.refetch()
               .then(({data}) => {
+                props.changeIsLoad(false);
+                props.isOpen(false)
                 props.updateFeed(data.getPost)
               })
             }

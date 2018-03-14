@@ -32,10 +32,14 @@ export const ConfirmDialog = props => (
         <div className="label">
           <p>Are you sure?</p>
         </div>
-        <div className="button">
+        <div className="button"> 
+        {
+          !props.loading ?           
           <ButtonComponent width="100px" onClick={props.onSubmit}>
-            OK
-          </ButtonComponent>
+          OK
+          </ButtonComponent> : 
+          <ButtonComponent loading width='100px'/>
+        }
           <ButtonComponent width="100px" onClick={props.onCancel}>
             Cancel
           </ButtonComponent>

@@ -23,7 +23,7 @@ const enhance = compose(
 );
 
 const InputPost = props => (
-  <Wrapper bgColor="white" borderRadius="8px" margin="0px 10px" width="500px">
+  <Wrapper bgColor="white" borderRadius="8px" margin="0px 10px" width="500px" animation='fade-in 0.35s'>
     <div className="title">
       <span>Title: </span>
       <Text value="" name="title" required />

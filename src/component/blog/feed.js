@@ -22,6 +22,7 @@ const enhance = compose(
   graphql(deletePost),
   withApollo,
   withState("isOpen", "changeOpen", false),
+  withState('isLoading', 'changeLoading', false),
   withHandlers({
     isClose: props => () => {
       props.changeOpen(false);
@@ -30,16 +31,16 @@ const enhance = compose(
       props.changeOpen(true);
     },
     onSubmit: props => event => {
-      props.changeOpen(false);
+      props.changeLoading(true)
       props.mutate({
         variables: {
           id: props.post.id 
         }
       }).then(res => {
         if(res.data.deletePost.status) {
-          console.log(props)
           props.refetch()
-          //window.location.reload()
+          props.changeLoading(false)
+          props.changeOpen(false);
         }
       })
     },
@@ -49,7 +50,7 @@ const enhance = compose(
   })
 );
 const Feed = props => (
-  <Wrapper bgColor="white" margin="20px 0px" borderRadius="4px">
+  <Wrapper bgColor="white" margin="20px 0px" borderRadius="4px" animation='fade-in 0.5s'>
     <Header post={props.post} me={props.me} openPopup={props.openPopup} />
     <Content post={props.post} />
     <ConfirmDialog
@@ -57,6 +58,7 @@ const Feed = props => (
       isClose={props.isClose}
       onSubmit={props.onSubmit}
       onCancel={props.onCancel}
+      loading={props.isLoading}
     />
   </Wrapper>
 );
