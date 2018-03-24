@@ -10,6 +10,8 @@ import { Wrapper } from "../../theme/common/wrapper/wrapper";
 
 const enhance = compose(
   withState("imagePreview", "setImagePreview", null),
+  withState("title", "handleTitle", ""),
+  withState("description", "handleDescription", ""),
   withHandlers({
     getFile: props => ({ image, file }) => {
       props.setImagePreview(image);
@@ -23,10 +25,16 @@ const enhance = compose(
 );
 
 const InputPost = props => (
-  <Wrapper bgColor="white" borderRadius="8px" margin="0px 10px" width="500px" animation='fade-in 0.35s'>
+  <Wrapper
+    bgColor="white"
+    borderRadius="8px"
+    margin="0px 10px"
+    width="500px"
+    animation="fade-in 0.35s"
+  >
     <div className="title">
       <span>Title: </span>
-      <Text value="" name="title" required />
+      <Text name="title" required value={props.title} />
     </div>
     <div className="detail">
       <span>Description: </span>
@@ -34,7 +42,7 @@ const InputPost = props => (
         maxLength={500}
         name="description"
         row="8"
-        defaultValue={props.defaultValue}
+        value={props.description}
         required
       />
     </div>
@@ -57,6 +65,7 @@ const InputPost = props => (
           type="submit"
           disabled={!props.canSubmit}
           width="100px"
+          //onClick={props.resetForm}
         >
           Post
         </ButtonComponent>

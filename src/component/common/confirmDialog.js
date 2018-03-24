@@ -16,7 +16,7 @@ const enhance = compose(
   }),
   lifecycle({
     componentDidMount() {
-      console.log("props ===>", this);
+      //ßconsole.log("props ===>", this);
       ReactDOM.findDOMNode(root).addEventListener(
         "wheel",
         this.props.handleScroll,
@@ -32,14 +32,14 @@ export const ConfirmDialog = props => (
         <div className="label">
           <p>Are you sure?</p>
         </div>
-        <div className="button"> 
-        {
-          !props.loading ?           
-          <ButtonComponent width="100px" onClick={props.onSubmit}>
-          OK
-          </ButtonComponent> : 
-          <ButtonComponent loading width='100px'/>
-        }
+        <div className="button">
+          {!props.loading ? (
+            <ButtonComponent width="100px" onClick={props.onSubmit}>
+              OK
+            </ButtonComponent>
+          ) : (
+            <ButtonComponent loading width="100px" />
+          )}
           <ButtonComponent width="100px" onClick={props.onCancel}>
             Cancel
           </ButtonComponent>

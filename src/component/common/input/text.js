@@ -21,7 +21,7 @@ const Text = props => (
     type={props.type || "text"}
     id={props.id}
     onChange={props.changeValue}
-    value={props.getValue() ? props.getValue() : props.value}
+    value={props.getValue() ? props.getValue() : ""}
     width={props.width}
   />
 );

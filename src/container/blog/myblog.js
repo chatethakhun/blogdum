@@ -14,6 +14,7 @@ import { connect } from "react-redux";
 import gql from "graphql-tag";
 import { graphql, withApollo } from "react-apollo";
 import { CenterComponent } from "../../component/common/center-component/centercomponent";
+import ImageCompressor from "image-compressor.js";
 const creastePost = gql`
   mutation createPost($image: String, $title: String!, $description: String!) {
     createPost(title: $title, description: $description, image: $image) {
@@ -24,8 +25,8 @@ const creastePost = gql`
 `;
 
 const getPost = gql`
-  query post  ($skip: Int){
-    getPost(limit: 5 ,skip: $skip) {
+  query post($skip: Int) {
+    getPost(limit: 5, skip: $skip) {
       id
       image
       title
@@ -44,22 +45,93 @@ const enhance = compose(
   withApollo,
   graphql(creastePost),
   graphql(getPost, {
-    options: (props)=> {
+    options: props => {
       return {
-        variables: { skip: 1}
-      }
+        variables: { skip: 1 }
+      };
     }
   }),
   withState("popupOpen", "isOpen", false),
+  withState("value", "changeValue", ""),
   withState("canSubmit", "changeEnableSubmit", false),
   withState("fileImage", "setImage", null),
   withState("post", "setPost", null),
   withState("isLoading", "changeIsLoad", false),
-  withState('skip', 'changeSkip', 1),
+  withState("skip", "changeSkip", 1),
   withHandlers({
     updateFeed: props => newFeed => {
-      props.setPost(newFeed)
+      props.setPost(newFeed);
     }
+  }),
+  withHandlers(() => {
+    let form = null;
+    return {
+      onRef: () => ref => (form = ref),
+      submits: props => formData => {
+        props.changeIsLoad(true);
+        if (props.fileImage) {
+          // compress image beforre upload
+          const imageCompressor = new ImageCompressor();
+          imageCompressor
+            .compress(props.fileImage, {
+              quality: 0.6
+            })
+            .then(res => {
+              //console.log("compress image", res);
+              const form = new FormData();
+              form.append("file", res, res.name);
+              const config = {
+                headers: {
+                  "content-type": "multipart/form-data",
+                  authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+              };
+              axios
+                .post(PRODUCT_ENDPOINT + "v1/upload", form, config)
+                .then(res => {
+                  props
+                    .mutate({
+                      variables: {
+                        title: formData.title,
+                        description: formData.description,
+                        image: res.data.url
+                      },
+                      refetchQueries: [{ query: getPost }]
+                    })
+                    .then(res => {
+                      if (res.data.createPost.status) {
+                        props.data.refetch().then(({ data }) => {
+                          props.changeIsLoad(false);
+                          props.isOpen(false);
+                          props.updateFeed(data.getPost);
+                          form.reset();
+                        });
+                      }
+                    });
+                });
+            });
+        } else {
+          props
+            .mutate({
+              variables: {
+                title: formData.title,
+                description: formData.description,
+                image: null
+              }
+            })
+            .then(res => {
+              if (res.data.createPost.status) {
+                props.data.refetch().then(({ data }) => {
+                  props.changeIsLoad(false);
+                  props.isOpen(false);
+                  props.updateFeed(data.getPost);
+                  form.reset();
+                });
+              }
+            });
+        }
+      }
+    };
   }),
   withHandlers({
     handleOpenPopup: props => () => {
@@ -68,60 +140,6 @@ const enhance = compose(
     handleClosePopup: props => () => {
       if (props.popupOpen) {
         props.isOpen(false);
-      }
-    },
-    submit: props => formData => {
-      props.changeIsLoad(true);
-      // check image file 
-      if (props.fileImage) {
-        const form = new FormData();
-        form.append("file", props.fileImage);
-        const config = {
-          headers: {
-            "content-type": "multipart/form-data",
-            authorization: `Bearer ${localStorage.getItem("token")}`
-          }
-        };
-        axios.post(PRODUCT_ENDPOINT + "v1/upload", form, config).then(res => {
-          props
-            .mutate({
-              variables: {
-                title: formData.title,
-                description: formData.description,
-                image: res.data.url
-              },
-              refetchQueries: [ { query: getPost }]
-            })
-            .then(res => {
-              if (res.data.createPost.status) {
-                props.data.refetch()
-                .then(({data}) => {
-                  props.changeIsLoad(false);
-                  props.isOpen(false)
-                  props.updateFeed(data.getPost)
-                })
-              }
-            });
-        });
-      } else {
-        props
-          .mutate({
-            variables: {
-              title: formData.title,
-              description: formData.description,
-              image: null
-            },
-          })
-          .then(res => {
-            if (res.data.createPost.status) {
-              props.data.refetch()
-              .then(({data}) => {
-                props.changeIsLoad(false);
-                props.isOpen(false)
-                props.updateFeed(data.getPost)
-              })
-            }
-          });
       }
     },
     enableSubmit: props => () => {
@@ -133,58 +151,63 @@ const enhance = compose(
     getImage: props => image => {
       props.setImage(image);
     },
-    refetch: ( props ) => () => {
-        props.data.refetch().then(res => {
-        props.updateFeed(res.data.getPost)
-      })
+    refetch: props => () => {
+      props.data.refetch().then(res => {
+        props.updateFeed(res.data.getPost);
+      });
     },
-    handleScroll: props => event => { 
+    handleScroll: props => event => {
       // scroll to bottom then fetch data
-      const feed = document.getElementById('feed').scrollHeight
+      const feed = document.getElementById("feed").scrollHeight;
       const html = document.documentElement;
-      if((event.target.scrollTop + html.clientHeight) >= feed) {
-        props.changeIsLoad(true)
-        const newSkip = props.skip + 1
-        props.client.query({
-          query:gql`
-          query post ( $skip: Int!){
-            getPost(limit: 5 ,skip: $skip) {
-              image
-              title
-              description
-              create_at
+      if (event.target.scrollTop + html.clientHeight >= feed) {
+        props.changeIsLoad(true);
+        const newSkip = props.skip + 1;
+        props.client
+          .query({
+            query: gql`
+              query post($skip: Int!) {
+                getPost(limit: 5, skip: $skip) {
+                  image
+                  title
+                  description
+                  create_at
+                }
+              }
+            `,
+            variables: { skip: newSkip }
+          })
+          .then(res => {
+            if (props.data.networkStatus === 7) {
+              if (res.data.getPost.length > 0) {
+                let newPost = [...props.post];
+                res.data.getPost.map(post => newPost.push(post));
+                props.setPost(newPost);
+                props.changeSkip(newSkip);
+              }
             }
-          }
-        `,
-          variables: {skip: newSkip}
-        }).then(res => {
-          if (props.data.networkStatus === 7) {
-            if(res.data.getPost.length > 0){
-              let newPost = [...props.post];
-              res.data.getPost.map(post => newPost.push(post));
-              props.setPost(newPost)
-              props.changeSkip(newSkip)
-            } 
-          }
-          props.changeIsLoad(false)        
-        })
-      } 
+            props.changeIsLoad(false);
+          });
+      }
     }
   }),
   lifecycle({
-    componentDidMount(){
-      //add handle scroll 
-      window.addEventListener('scroll', this.props.handleScroll, true)
+    componentDidMount() {
+      //add handle scroll
+      window.addEventListener("scroll", this.props.handleScroll, true);
     },
     componentWillReceiveProps(nextProps) {
       // check apollo load finish
-      if (this.props.data.networkStatus === 1 && nextProps.data.networkStatus === 7) { 
-        nextProps.setPost(nextProps.data.getPost)
+      if (
+        this.props.data.networkStatus === 1 &&
+        nextProps.data.networkStatus === 7
+      ) {
+        nextProps.setPost(nextProps.data.getPost);
       }
     },
     componentWillUnmount() {
       //must have this
-      window.removeEventListener('scroll', this.props.handleScroll, true)
+      window.removeEventListener("scroll", this.props.handleScroll, true);
     }
   })
 );
@@ -192,7 +215,6 @@ const enhance = compose(
 const MyBlog = props => (
   <Wrapper>
     <CreastePost handlePopup={props.handleOpenPopup} />
-    {console.log('new porop',props.post)}
     <Popup
       isOpen={props.popupOpen}
       isClose={props.handleClosePopup}
@@ -201,31 +223,38 @@ const MyBlog = props => (
     >
       <FormCreatePostContainer>
         <Formsy.Form
-          onValidSubmit={props.submit}
+          onSubmit={props.submits}
           onValid={props.enableSubmit}
           onInvalid={props.disableSubmit}
-          refs="form"
+          ref={props.onRef}
         >
           <InputPost
-            defaultValue=""
+            value={props.value}
             canSubmit={props.canSubmit}
             isLoading={props.isLoading}
             getImage={image => props.getImage(image)}
+            //resetForm={props.submits}
           />
         </Formsy.Form>
       </FormCreatePostContainer>
     </Popup>
     <div id="feed">
-    {
-      !props.data.loading
-      ? props.post && props.post.map((post, index) => (
-          <Feed key={index} post={post} me={props.me} id='feed' refetch={props.refetch}/>
+      {!props.data.loading ? (
+        props.post &&
+        props.post.map((post, index) => (
+          <Feed
+            key={index}
+            post={post}
+            me={props.me}
+            id="feed"
+            refetch={props.refetch}
+          />
         ))
-      : <CenterComponent loading height='100vh'/>}
+      ) : (
+        <CenterComponent loading height="100vh" />
+      )}
     </div>
-    {
-      props.isLoading  && <CenterComponent loading />
-    }
+    {props.isLoading && <CenterComponent loading />}
   </Wrapper>
 );
 
