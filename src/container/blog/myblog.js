@@ -16,8 +16,8 @@ import { graphql, withApollo } from "react-apollo";
 import { CenterComponent } from "../../component/common/center-component/centercomponent";
 import ImageCompressor from "image-compressor.js";
 const creastePost = gql`
-  mutation createPost($image: String, $title: String!, $description: String!) {
-    createPost(title: $title, description: $description, image: $image) {
+  mutation createPost($image: String, $title: String!, $category: String!, $description: String!) {
+    createPost(title: $title, description: $description, image: $image, category:$category) {
       message
       status
     }
@@ -26,7 +26,7 @@ const creastePost = gql`
 
 const getPost = gql`
   query post($skip: Int) {
-    getPost(limit: 5, skip: $skip) {
+    posts(limit: 5, skip: $skip) {
       id
       image
       title
@@ -153,7 +153,7 @@ const enhance = compose(
     },
     refetch: props => () => {
       props.data.refetch().then(res => {
-        props.updateFeed(res.data.getPost);
+        props.updateFeed(res.data.posts);
       });
     },
     handleScroll: props => event => {
@@ -167,7 +167,7 @@ const enhance = compose(
           .query({
             query: gql`
               query post($skip: Int!) {
-                getPost(limit: 5, skip: $skip) {
+                posts(limit: 5, skip: $skip) {
                   image
                   title
                   description
@@ -179,9 +179,9 @@ const enhance = compose(
           })
           .then(res => {
             if (props.data.networkStatus === 7) {
-              if (res.data.getPost.length > 0) {
+              if (res.data.posts.length > 0) {
                 let newPost = [...props.post];
-                res.data.getPost.map(post => newPost.push(post));
+                res.data.posts.map(post => newPost.push(post));
                 props.setPost(newPost);
                 props.changeSkip(newSkip);
               }
@@ -202,7 +202,7 @@ const enhance = compose(
         this.props.data.networkStatus === 1 &&
         nextProps.data.networkStatus === 7
       ) {
-        nextProps.setPost(nextProps.data.getPost);
+        nextProps.setPost(nextProps.data.posts);
       }
     },
     componentWillUnmount() {
