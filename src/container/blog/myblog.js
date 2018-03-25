@@ -64,9 +64,9 @@ const enhance = compose(
     }
   }),
   withHandlers(() => {
-    let form = null;
+    let formRef = null;
     return {
-      onRef: () => ref => (form = ref),
+      onRef: () => ref => (formRef = ref),
       submits: props => formData => {
         props.changeIsLoad(true);
         if (props.fileImage) {
@@ -89,14 +89,14 @@ const enhance = compose(
               axios
                 .post(PRODUCT_ENDPOINT + "v1/upload", form, config)
                 .then(res => {
+                  //console.log("res", res, formData);
                   props
                     .mutate({
                       variables: {
                         title: formData.title,
                         description: formData.description,
                         image: res.data.url
-                      },
-                      refetchQueries: [{ query: getPost }]
+                      }
                     })
                     .then(res => {
                       if (res.data.createPost.status) {
@@ -104,7 +104,7 @@ const enhance = compose(
                           props.changeIsLoad(false);
                           props.isOpen(false);
                           props.updateFeed(data.getPost);
-                          form.reset();
+                          formRef.reset();
                         });
                       }
                     });
@@ -125,7 +125,7 @@ const enhance = compose(
                   props.changeIsLoad(false);
                   props.isOpen(false);
                   props.updateFeed(data.getPost);
-                  form.reset();
+                  formRef.reset();
                 });
               }
             });
