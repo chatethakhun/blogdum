@@ -15,3 +15,18 @@ export const ButtonTheme = styled.button`
     background: #eaeaea;
 
 `;
+
+
+export const ButtonUploadImageContainer =  styled.label`
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color:${COLOR.SECONARY};
+    cursor: pointer;
+    label {
+        color: white;
+    }
+`

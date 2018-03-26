@@ -24,13 +24,39 @@ export const PopupContainer = styled.div`
 `;
 
 export const FormCreatePostContainer = styled.div`
+background: white;
+padding: 15px;
+border: 1px solid red;
 > form {
     display: flex;
     justify-content: center;
-    > div {
-      > div {
-        margin-bottom: 15px;
+    flex-direction: column;
+    > .image-preview {
+      width: 100%;
+      position: relative;
+      img {
+        width: 100%;
       }
+      > div {
+        cursor: pointer;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        opacity: 0.6;
+        background-color: black;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        > span {
+          color: white;
+        }
+      }
+    }
+    > div {
+      margin-bottom: 10px;
       .title {
         display: flex;
         flex-direction: column;

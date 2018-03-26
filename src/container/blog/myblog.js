@@ -4,7 +4,6 @@ import CreastePost from "../../component/blog/create-post";
 import Feed from "../../component/blog/feed";
 import { FormCreatePostContainer } from "../../theme/common/pop-up/pop-up-theme";
 import Formsy from "formsy-react-es6";
-import InputPost from "../../component/blog/input-post";
 import { PRODUCT_ENDPOINT } from "../../constant/apollo/constant";
 import Popup from "../../component/common/pop-up/pop-up";
 import React from "react";
@@ -14,7 +13,11 @@ import { connect } from "react-redux";
 import gql from "graphql-tag";
 import { graphql, withApollo } from "react-apollo";
 import { CenterComponent } from "../../component/common/center-component/centercomponent";
-import ImageCompressor from "image-compressor.js";
+import Text from '../../component/common/input/text'
+import TextareaWithLimitWord from '../../component/common/input/textarea-with-limit-word'
+import DropDown from '../../component/common/input/dropdown'
+import { ButtonComponent } from "../../component/common/button/button";
+import ButtonUploadImage from '../../component/common/button/button-upload-image'
 const creastePost = gql`
   mutation createPost($image: String, $title: String!, $category: String!, $description: String!) {
     createPost(title: $title, description: $description, image: $image, category:$category) {
@@ -55,12 +58,22 @@ const enhance = compose(
   withState("value", "changeValue", ""),
   withState("canSubmit", "changeEnableSubmit", false),
   withState("fileImage", "setImage", null),
+  withState("file", "handleFile", []),
   withState("post", "setPost", null),
   withState("isLoading", "changeIsLoad", false),
   withState("skip", "changeSkip", 1),
+  withState('formEnable', 'handleForm', false),
+  withState('selectedText', 'handleSelectedText', ''),
   withHandlers({
     updateFeed: props => newFeed => {
       props.setPost(newFeed);
+    },
+    checkValidate: props => () => {
+      if(props.formEnable && props.selectedText !== '') {
+        props.changeEnableSubmit(true)
+      }else {
+        props.changeEnableSubmit(false)
+      }
     }
   }),
   withHandlers(() => {
@@ -70,16 +83,9 @@ const enhance = compose(
       submits: props => formData => {
         props.changeIsLoad(true);
         if (props.fileImage) {
-          // compress image beforre upload
-          const imageCompressor = new ImageCompressor();
-          imageCompressor
-            .compress(props.fileImage, {
-              quality: 0.6
-            })
-            .then(res => {
-              //console.log("compress image", res);
+              console.log(props.fileImage)
               const form = new FormData();
-              form.append("file", res, res.name);
+              form.append("file", props.file);
               const config = {
                 headers: {
                   "content-type": "multipart/form-data",
@@ -89,12 +95,12 @@ const enhance = compose(
               axios
                 .post(PRODUCT_ENDPOINT + "v1/upload", form, config)
                 .then(res => {
-                  //console.log("res", res, formData);
                   props
                     .mutate({
                       variables: {
                         title: formData.title,
                         description: formData.description,
+                        category: props.selectedText,
                         image: res.data.url
                       }
                     })
@@ -103,12 +109,12 @@ const enhance = compose(
                         props.data.refetch().then(({ data }) => {
                           props.changeIsLoad(false);
                           props.isOpen(false);
-                          props.updateFeed(data.getPost);
+                          props.updateFeed(data.posts);
                           formRef.reset();
                         });
                       }
                     });
-                });
+                
             });
         } else {
           props
@@ -116,6 +122,7 @@ const enhance = compose(
               variables: {
                 title: formData.title,
                 description: formData.description,
+                category: props.selectedText,
                 image: null
               }
             })
@@ -124,16 +131,24 @@ const enhance = compose(
                 props.data.refetch().then(({ data }) => {
                   props.changeIsLoad(false);
                   props.isOpen(false);
-                  props.updateFeed(data.getPost);
+                  props.updateFeed(data.posts);
                   formRef.reset();
                 });
               }
             });
         }
-      }
+      },
+      handleSelected: props => selectedText => {
+        props.handleSelectedText(selectedText, () => {
+          props.checkValidate()
+        })
+      },
     };
   }),
   withHandlers({
+    removePreview: props => () => {
+      props.setImage(null)
+    },
     handleOpenPopup: props => () => {
       props.isOpen(!props.popupOpen);
     },
@@ -143,13 +158,18 @@ const enhance = compose(
       }
     },
     enableSubmit: props => () => {
-      props.changeEnableSubmit(true);
+      props.handleForm(true, () => {
+        props.checkValidate()
+      });
     },
     disableSubmit: props => () => {
-      props.changeEnableSubmit(false);
+      props.handleForm(false, () => {
+        props.checkValidate()
+      });
     },
-    getImage: props => image => {
+    getImage: props => (image, file) => {
       props.setImage(image);
+      props.handleFile(file)
     },
     refetch: props => () => {
       props.data.refetch().then(res => {
@@ -228,13 +248,31 @@ const MyBlog = props => (
           onInvalid={props.disableSubmit}
           ref={props.onRef}
         >
-          <InputPost
-            value={props.value}
-            canSubmit={props.canSubmit}
-            isLoading={props.isLoading}
-            getImage={image => props.getImage(image)}
-            //resetForm={props.submits}
-          />
+        <div>
+          <Text name="title" required value="" placeholder="Title" width='100%'/>
+        </div>
+        <DropDown handleChange={(selectedText) => props.handleSelected(selectedText)} defaultValue={props.defaultValue}/>
+        <div>
+          <TextareaWithLimitWord name='description' placeholder='Description' maxLength={300} rows={10} required/>
+        </div>
+
+        {
+          props.fileImage &&        
+          <div className="image-preview">
+            <img src={props.fileImage} alt=''/> 
+            <div onClick={props.removePreview}>
+              <span className="fas fa-times" />
+            </div>
+          </div>
+        }
+
+        <div style={{display: "flex", justifyContent: 'space-between', alignItems:'center'}}>
+          <ButtonUploadImage getImage={(image, file) => props.getImage(image, file)}/>
+          {
+            props.isLoading ? <ButtonComponent loading width="50px" /> : <ButtonComponent disabled={!props.canSubmit} width="50px">Post</ButtonComponent>
+          }
+          
+        </div>
         </Formsy.Form>
       </FormCreatePostContainer>
     </Popup>

@@ -29,8 +29,9 @@ const TextareaWithLimitWord = props => (
     <textarea
       maxLength={props.maxLength}
       onChange={props.handleTextarea}
-      rows={props.row}
+      rows={props.rows}
       value={props.getValue() || ""}
+      placeholder={props.placeholder}
     />
     <span>{props.length} characters remaining</span>
   </TextareaContainer>
