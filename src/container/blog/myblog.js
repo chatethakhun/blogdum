@@ -7,7 +7,7 @@ import Formsy from "formsy-react-es6";
 import { PRODUCT_ENDPOINT } from "../../constant/apollo/constant";
 import Popup from "../../component/common/pop-up/pop-up";
 import React from "react";
-import { Wrapper } from "../../theme/common/wrapper/wrapper";
+import { Wrapper, TwoColumn } from "../../theme/common/wrapper/wrapper";
 import axios from "axios";
 import { connect } from "react-redux";
 import gql from "graphql-tag";
@@ -18,6 +18,7 @@ import TextareaWithLimitWord from '../../component/common/input/textarea-with-li
 import DropDown from '../../component/common/input/dropdown'
 import { ButtonComponent } from "../../component/common/button/button";
 import ButtonUploadImage from '../../component/common/button/button-upload-image'
+import { CategoryListContainer } from '../../theme/blog/blog-theme'
 const creastePost = gql`
   mutation createPost($image: String, $title: String!, $category: String!, $description: String!) {
     createPost(title: $title, description: $description, image: $image, category:$category) {
@@ -28,8 +29,8 @@ const creastePost = gql`
 `;
 
 const getPost = gql`
-  query post($skip: Int) {
-    posts(limit: 5, skip: $skip) {
+  query post($skip: Int $category: String) {
+    posts(limit: 5, skip: $skip, category: $category)  {
       id
       image
       title
@@ -63,7 +64,9 @@ const enhance = compose(
   withState("isLoading", "changeIsLoad", false),
   withState("skip", "changeSkip", 1),
   withState('formEnable', 'handleForm', false),
-  withState('selectedText', 'handleSelectedText', ''),
+  withState('selectedText', 'handleSelectedText', null),
+  withState('activeCategory', 'changeActive', 0),
+  withState('categorySelected','handleCategorySelected', null),
   withHandlers({
     updateFeed: props => newFeed => {
       props.setPost(newFeed);
@@ -78,12 +81,14 @@ const enhance = compose(
   }),
   withHandlers(() => {
     let formRef = null;
+    let feedHeigth = null
     return {
       onRef: () => ref => (formRef = ref),
+      FeedHeightRef: () => ref => feedHeigth = ref,
       submits: props => formData => {
         props.changeIsLoad(true);
         if (props.fileImage) {
-              console.log(props.fileImage)
+              //console.log(props.fileImage)
               const form = new FormData();
               form.append("file", props.file);
               const config = {
@@ -101,12 +106,13 @@ const enhance = compose(
                         title: formData.title,
                         description: formData.description,
                         category: props.selectedText,
-                        image: res.data.url
+                        image: res.data.url,
                       }
                     })
                     .then(res => {
                       if (res.data.createPost.status) {
                         props.data.refetch().then(({ data }) => {
+                          console.log(data)
                           props.changeIsLoad(false);
                           props.isOpen(false);
                           props.updateFeed(data.posts);
@@ -128,7 +134,13 @@ const enhance = compose(
             })
             .then(res => {
               if (res.data.createPost.status) {
-                props.data.refetch().then(({ data }) => {
+                props.data.refetch({
+                  variables: {
+                    skip: 1, 
+                    category: props.categorySelected
+                  }
+                }).then(({ data }) => {
+                  //console.log(data)
                   props.changeIsLoad(false);
                   props.isOpen(false);
                   props.updateFeed(data.posts);
@@ -142,6 +154,46 @@ const enhance = compose(
         props.handleSelectedText(selectedText, () => {
           props.checkValidate()
         })
+      },
+      handleScroll: props => event => {
+        // scroll to bottom then fetch data
+        var scrollviewOffsetY = event.target.scrollTop 
+        var scrollviewFrameHeight = event.target.clientHeight 
+        var scrollviewContentHeight = event.target.scrollHeight 
+        var sum = scrollviewOffsetY + scrollviewFrameHeight 
+        
+        if (sum >= scrollviewContentHeight) {
+          //console.log(props.categorySelected)
+          props.changeIsLoad(true);
+          const newSkip = props.skip + 1;
+          props.client
+            .query({
+              query: gql`
+                query post($skip: Int! $category: String) {
+                  posts(limit: 5, skip: $skip, category: $category) {
+                    image
+                    title
+                    description
+                    create_at,
+                    category
+                  }
+                }
+              `,
+              variables: { skip: newSkip, category: props.categorySelected }
+            })
+            .then(({ data }) => {
+              //console.log('res', data.posts.length)
+              if(data.posts.length > 0) {
+                let newPost = [...props.post];
+                data.posts.map(post => newPost.push(post));
+                //console.log('res', newPost)
+                props.updateFeed(newPost);
+                props.changeSkip(newSkip);
+                props.changeIsLoad(false);
+              }
+              props.changeIsLoad(false)
+            });
+        }
       },
     };
   }),
@@ -176,39 +228,35 @@ const enhance = compose(
         props.updateFeed(res.data.posts);
       });
     },
-    handleScroll: props => event => {
-      // scroll to bottom then fetch data
-      const feed = document.getElementById("feed").scrollHeight;
-      const html = document.documentElement;
-      if (event.target.scrollTop + html.clientHeight >= feed) {
-        props.changeIsLoad(true);
-        const newSkip = props.skip + 1;
-        props.client
-          .query({
-            query: gql`
-              query post($skip: Int!) {
-                posts(limit: 5, skip: $skip) {
-                  image
-                  title
-                  description
-                  create_at
-                }
-              }
-            `,
-            variables: { skip: newSkip }
-          })
-          .then(res => {
-            if (props.data.networkStatus === 7) {
-              if (res.data.posts.length > 0) {
-                let newPost = [...props.post];
-                res.data.posts.map(post => newPost.push(post));
-                props.setPost(newPost);
-                props.changeSkip(newSkip);
-              }
+    selecteCategory: props => (index) => {
+      const menuSelected = categorys.filter(category => (category.id - 1) === index)
+      props.changeActive(menuSelected[0].id - 1)
+      props.handleCategorySelected(menuSelected[0].name === 'All' ? null : menuSelected[0].name)
+      props.changeIsLoad(true)
+      props.setPost(null)
+      props.client
+      .query({
+        query: gql`
+          query post($skip: Int! $category: String) {
+            posts(limit: 5, skip: $skip, category: $category) {
+              image
+              title
+              description
+              create_at
             }
-            props.changeIsLoad(false);
-          });
-      }
+          }
+        `,
+        variables: { skip: 1, category: menuSelected[0].name === 'All' ? null : menuSelected[0].name }
+      })
+      .then(res => {
+        //console.log(res)
+        if(res.networkStatus === 7) {
+          let newPost = [];
+          res.data.posts.map(post => newPost.push(post))
+          props.setPost(newPost)
+          props.changeIsLoad(false)
+        }
+      });
     }
   }),
   lifecycle({
@@ -233,8 +281,11 @@ const enhance = compose(
 );
 
 const MyBlog = props => (
-  <Wrapper>
+  <Wrapper minHeight={'calc(100% - 70px)'} padding='20px 20px 0px 20px'>
     <CreastePost handlePopup={props.handleOpenPopup} />
+    {
+      console.log('props selected ', props.categorySelected)
+    }
     <Popup
       isOpen={props.popupOpen}
       isClose={props.handleClosePopup}
@@ -276,24 +327,78 @@ const MyBlog = props => (
         </Formsy.Form>
       </FormCreatePostContainer>
     </Popup>
-    <div id="feed">
-      {!props.data.loading ? (
-        props.post &&
-        props.post.map((post, index) => (
-          <Feed
-            key={index}
-            post={post}
-            me={props.me}
-            id="feed"
-            refetch={props.refetch}
-          />
-        ))
-      ) : (
-        <CenterComponent loading height="100vh" />
-      )}
-    </div>
-    {props.isLoading && <CenterComponent loading />}
+    <TwoColumn>
+      <div id="feed" style={{flexBasis: '70%'}} ref={props.FeedHeightRef}>
+      {
+        !props.data.loading ? [
+          props.post && props.post.map((post, index) => (
+            <Feed
+              key={index}
+              post={post}
+              me={props.me}
+              id="feed"
+              refetch={props.refetch}
+            />
+          )),(
+            props.isLoading  && <CenterComponent loading height="50px" />
+          )]
+          :
+          <CenterComponent loading height="100vh" />
+      }
+      </div>
+      <Wrapper bgColor="white" padding='0' margin="20px 10px" basis='30%' height="50%">
+        <Header title="CATEGORY"/>
+        <CategoryList 
+          selecteCategory={(index) => props.selecteCategory(index)}
+          activeCategory={props.activeCategory}
+        />
+      </Wrapper>
+    </TwoColumn>
+
+    
   </Wrapper>
 );
 
 export default enhance(MyBlog);
+
+const Header = props => (
+  <div style={{textAlign: 'center'}}>
+    <h1>{props.title}</h1>
+  </div>
+)
+
+const categorys =[{
+  id: 1,
+  name: "All"
+},
+{
+  id: 2,
+  name: "General"
+},
+{
+  id: 3,
+  name: "Knowledge"
+}]
+const CategoryList = props => (
+  <CategoryListContainer>
+    {
+      categorys.map((category, index) => (
+        <div key={category.id} 
+             onClick={() => props.selecteCategory(index)} 
+             className={ props.activeCategory === index ? 'active': null}>
+          <span>{category.name}</span>
+        </div>
+      ))
+    }
+  </CategoryListContainer>
+)
+
+// {!props.data.loading  ? (
+//   props.post && props.post.length > 0 ?
+// props.post.map((post, index) => (
+    
+//   )) : 'No Feed'
+// ) : (
+//   <CenterComponent loading height="100vh" />
+// )}
+// {props.isLoading && <CenterComponent loading />}

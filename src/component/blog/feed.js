@@ -48,7 +48,7 @@ const enhance = compose(
   })
 );
 const Feed = props => (
-  <Wrapper bgColor="white" margin="20px 0px" borderRadius="4px" animation='fade-in 0.5s'>
+  <Wrapper bgColor="white" margin="20px 0px 0px 0px" borderRadius="4px" animation='fade-in 0.5s'>
     <Header post={props.post} me={props.me} openPopup={props.openPopup} />
     <Content post={props.post} />
     <ConfirmDialog

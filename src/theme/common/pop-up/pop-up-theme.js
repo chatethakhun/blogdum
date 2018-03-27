@@ -26,7 +26,7 @@ export const PopupContainer = styled.div`
 export const FormCreatePostContainer = styled.div`
 background: white;
 padding: 15px;
-border: 1px solid red;
+margin: 0px 20px;
 > form {
     display: flex;
     justify-content: center;

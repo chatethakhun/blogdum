@@ -91,3 +91,25 @@ export const ContentContainer = styled.div`
     margin-top: 10px;
   }
 `;
+
+export const CategoryListContainer = styled.div`
+  > div {
+    padding: 10px 5px;
+    cursor: pointer;
+    &.active {
+      background-color: ${COLOR.SECONARY};
+      > span {
+        color: white;
+      }
+    }
+    > span {
+      padding: 0px 10px;
+    }
+    &:hover {
+      background-color: ${COLOR.SECONARY};
+      > span {
+        color: white;
+      }
+    }
+  }
+`
